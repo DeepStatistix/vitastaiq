@@ -26,12 +26,23 @@
   </header>
 
   <main>
+<div class="hero-sec">
+    <div class="orb o1"></div><div class="orb o2"></div>
+    <canvas id="net" aria-hidden="true"></canvas>
     <div class="wrap hero">
+     <div class="hero-grid">
+      <div class="hero-copy">
       <div class="eyebrow glass"><span class="dot"></span> Statistics &middot; Data &middot; AI &mdash; from Kashmir</div>
       <h1>From messy data to <span class="rot grad" id="rot" aria-live="off">decisions</span></h1>
       <p class="lede">We help researchers, medical students, businesses and organisations turn raw numbers into sound analysis, clear dashboards and tools that keep working after we leave.</p>
       <a class="btn primary" href="#contact">Start a project</a>
       <a class="btn ghost" href="#demo">See a live dashboard</a>
+      </div>
+      <div class="console glass" aria-label="Pipeline log from the live mandi dashboard">
+        <div class="cbar"><i></i><i></i><i></i><span>pipeline &middot; mandi-intelligence</span><em class="cdot"></em></div>
+        <pre id="log" class="log"></pre>
+      </div>
+     </div>
 
       <div class="strip" id="strip">
         <div class="stat glass"><div class="n" data-count="17">0</div><div class="l">Peer-reviewed journal articles</div></div>
@@ -40,6 +51,26 @@
         <div class="stat glass live" id="liveB" hidden><div class="n" data-count="0" id="liveComm">0</div><div class="l">Commodities tracked live</div></div>
       </div>
     </div>
+</div>
+
+    <div class="ticker" id="ticker" hidden aria-label="Live mandi price ticker"><div class="tk" id="tk"></div></div>
+
+    <section class="flow">
+      <div class="wrap">
+        <div class="kicker rv">How we work with data</div>
+        <div class="flow-row rv">
+          <div class="node"><b>Collect</b><span>APIs, scrapers, surveys, hospital and field records</span></div>
+          <div class="link"></div>
+          <div class="node"><b>Clean</b><span>Fix units, gaps and errors before they mislead</span></div>
+          <div class="link"></div>
+          <div class="node"><b>Analyse</b><span>Statistics that match your question and design</span></div>
+          <div class="link"></div>
+          <div class="node"><b>Model</b><span>Forecasts and ML, tested honestly</span></div>
+          <div class="link"></div>
+          <div class="node"><b>Deliver</b><span>Reports, dashboards and tools you can use</span></div>
+        </div>
+      </div>
+    </section>
 
     <section id="services">
       <div class="wrap">
@@ -275,6 +306,98 @@
     document.getElementById("liveA").hidden = false;
     document.getElementById("liveB").hidden = false;
   }
+
+  /* live data helpers */
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+  var med = function (a) { a = a.slice().sort(function (x, y) { return x - y; }); var m = a.length >> 1; return a.length % 2 ? a[m] : (a[m - 1] + a[m]) / 2; };
+  var L = window.LIVE, byM = [], best = null;
+  if (L) {
+    Object.keys(L.commodities).forEach(function (n) { var c = L.commodities[n]; c.typ = med(c.states.map(function (s) { return s.p; })); c.nst = c.states.length; });
+    byM = Object.keys(L.commodities).sort(function (a, b) { return L.commodities[b].markets - L.commodities[a].markets; });
+    byM.forEach(function (n) {
+      var c = L.commodities[n]; if (c.nst < 4 || c.markets < 10) return;
+      var lo = c.states[0], hi = c.states[c.states.length - 1], r = hi.p / lo.p;
+      if (!best || r > best.r) best = { n: n, r: r, lo: lo.s, hi: hi.s };
+    });
+  }
+
+  /* price ticker */
+  if (L && byM.length) {
+    var items = byM.slice(0, 18).map(function (n) {
+      var c = L.commodities[n];
+      return "<span><b>" + esc(n.toUpperCase()) + "</b> <em>Rs " + fmt(c.typ) + "</em> <small>/quintal &middot; " + c.markets + " markets</small></span>";
+    }).join("");
+    document.getElementById("tk").innerHTML = items + items;
+    document.getElementById("ticker").hidden = false;
+  }
+
+  /* console: the real steps of the mandi pipeline, with today's numbers */
+  (function () {
+    var out = document.getElementById("log"), lines;
+    if (L) lines = [
+      ["p", "$ python fetch_live.py"],
+      ["m", "  querying data.gov.in, 36 state filters"],
+      ["ok", "  ok " + fmt(L.rows) + " records, " + L.states + " states reporting"],
+      ["p", "  normalising units"],
+      ["ok", "  ok " + (L.adjusted || 0) + " Rs/kg converted, " + (L.dropped || 0) + " dropped"],
+      ["ok", "  ok " + fmt(L.retail || 0) + " retail-market records set aside"],
+      ["p", "  aggregating"],
+      ["ok", "  ok " + L.markets + " markets, " + byM.length + " commodities"]
+    ].concat(best ? [["w", "  signal: widest gap " + best.n + " " + best.r.toFixed(1) + "x (" + best.lo + " to " + best.hi + ")"]] : [], [["m", "  ready, data for " + L.date]]);
+    else lines = [["p", "$ python fetch_live.py"], ["m", "  querying data.gov.in"], ["p", "  normalising units"], ["p", "  aggregating"], ["ok", "  ok dashboard data ready"]];
+    var html = [], li = 0, ci = 0;
+    function paint(cursor) { out.innerHTML = html.join("\n") + (cursor ? '<span class="cur"></span>' : ""); }
+    if (reduce) { html = lines.map(function (l) { return '<span class="' + l[0] + '">' + esc(l[1]) + "</span>"; }); paint(true); return; }
+    (function step() {
+      if (li >= lines.length) { paint(true); return; }
+      var l = lines[li], isCmd = l[0] === "p" && l[1].charAt(0) === "$";
+      if (isCmd && ci < l[1].length) {
+        ci += 1; out.innerHTML = html.concat(['<span class="p">' + esc(l[1].slice(0, ci)) + "</span>"]).join("\n") + '<span class="cur"></span>';
+        return setTimeout(step, 55);
+      }
+      html.push('<span class="' + l[0] + '">' + esc(l[1]) + "</span>"); li += 1; ci = 0; paint(true);
+      setTimeout(step, isCmd ? 400 : 330);
+    })();
+  })();
+
+  /* neural-network background */
+  (function () {
+    var c = document.getElementById("net"); if (!c || reduce || !c.getContext) return;
+    var x = c.getContext("2d"), W = 0, H = 0, pts = [], mouse = { x: -999, y: -999 }, run = true, LINK = 130;
+    function size() {
+      var r = c.parentNode.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2);
+      W = r.width; H = r.height; c.width = W * d; c.height = H * d; x.setTransform(d, 0, 0, d, 0, 0);
+      var n = Math.round(Math.min(95, W * H / 13000)); pts = [];
+      for (var i = 0; i < n; i++) pts.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - .5) * .38, vy: (Math.random() - .5) * .38, r: 1 + Math.random() * 1.7, h: Math.random() < .3 });
+    }
+    function frame() {
+      if (!run) return;
+      x.clearRect(0, 0, W, H);
+      for (var i = 0; i < pts.length; i++) {
+        var p = pts[i]; p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1; if (p.y < 0 || p.y > H) p.vy *= -1;
+        var dx = p.x - mouse.x, dy = p.y - mouse.y, dm = Math.sqrt(dx * dx + dy * dy);
+        if (dm < 120 && dm > 0) { p.x += dx / dm * .6; p.y += dy / dm * .6; }
+        for (var j = i + 1; j < pts.length; j++) {
+          var q = pts[j], ax = p.x - q.x, ay = p.y - q.y, d = Math.sqrt(ax * ax + ay * ay);
+          if (d < LINK) { x.strokeStyle = "rgba(" + (p.h || q.h ? "106,168,255" : "34,211,197") + "," + ((1 - d / LINK) * .42).toFixed(3) + ")"; x.lineWidth = 1; x.beginPath(); x.moveTo(p.x, p.y); x.lineTo(q.x, q.y); x.stroke(); }
+        }
+        x.fillStyle = p.h ? "rgba(106,168,255,.9)" : "rgba(34,211,197,.9)"; x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.283); x.fill();
+      }
+      requestAnimationFrame(frame);
+    }
+    size(); frame();
+    window.addEventListener("resize", size);
+    c.parentNode.addEventListener("mousemove", function (e) { var r = c.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; });
+    c.parentNode.addEventListener("mouseleave", function () { mouse.x = mouse.y = -999; });
+    if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { var v = es[0].isIntersecting; if (v && !run) { run = true; frame(); } run = v; }).observe(c);
+  })();
+
+  /* cursor spotlight on cards */
+  document.getElementById("cards").addEventListener("mousemove", function (e) {
+    var t = e.target.closest && e.target.closest(".card"); if (!t) return;
+    var r = t.getBoundingClientRect(); t.style.setProperty("--mx", (e.clientX - r.left) + "px"); t.style.setProperty("--my", (e.clientY - r.top) + "px");
+  });
 
   /* count-up */
   function count(n) {

@@ -132,3 +132,44 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
   .dot, .rot, .stat.live .l::before { animation: none; }
   html { scroll-behavior: auto; }
 }
+
+/* ---- intelligence-lab hero ---- */
+.hero-sec { position: relative; overflow: hidden; }
+#net { position: absolute; inset: 0; width: 100%; height: 100%; -webkit-mask-image: linear-gradient(#000 55%, transparent); mask-image: linear-gradient(#000 55%, transparent); }
+.orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .5; pointer-events: none; animation: floaty 14s ease-in-out infinite; }
+.o1 { width: 380px; height: 380px; background: rgba(34,211,197,.35); top: -120px; right: 6%; }
+.o2 { width: 320px; height: 320px; background: rgba(106,168,255,.3); bottom: -80px; left: -60px; animation-delay: -6s; }
+@keyframes floaty { 50% { transform: translate(30px, 26px) scale(1.08); } }
+.hero { z-index: 1; padding-bottom: 36px; }
+.hero-grid { display: grid; gap: 28px; grid-template-columns: 1.1fr 1fr; align-items: center; }
+@media (max-width: 920px) { .hero-grid { grid-template-columns: 1fr; } }
+.console { overflow: hidden; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; box-shadow: 0 20px 60px rgba(0,0,0,.4), 0 0 0 1px rgba(34,211,197,.08); }
+.cbar { display: flex; align-items: center; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--line); font-size: .74rem; color: var(--muted); }
+.cbar i { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.18); display: inline-block; }
+.cbar span { margin-left: 8px; flex: 1; }
+.cdot { width: 8px; height: 8px; border-radius: 50%; background: var(--a); animation: pulse 1.8s infinite; }
+.log { margin: 0; padding: 14px 16px; min-height: 250px; font: inherit; font-size: .79rem; line-height: 1.75; color: #b8c7dc; white-space: pre-wrap; word-break: break-word; }
+.log .p { color: var(--a); } .log .ok { color: #6fe3a1; } .log .m { color: var(--muted); } .log .w { color: var(--warm); }
+.log .cur { display: inline-block; width: 7px; height: 1em; background: var(--a); vertical-align: -2px; animation: blink2 1s steps(1) infinite; }
+@keyframes blink2 { 50% { opacity: 0; } }
+
+.ticker { overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgba(255,255,255,.025); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .82rem; white-space: nowrap; }
+.tk { display: inline-flex; gap: 38px; padding: 11px 0; animation: marq 80s linear infinite; }
+.ticker:hover .tk { animation-play-state: paused; }
+@keyframes marq { to { transform: translateX(-50%); } }
+.tk b { color: var(--fg); font-weight: 600; } .tk em { color: var(--a); font-style: normal; } .tk small { color: var(--muted); font-size: .78rem; }
+
+.flow { padding: 52px 0 0; }
+.flow-row { display: flex; align-items: stretch; margin-top: 12px; }
+.node { flex: 1; padding: 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
+.node b { display: block; font-size: 1.02rem; background: linear-gradient(90deg, var(--a), var(--b)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.node span { color: var(--muted); font-size: .84rem; }
+.link { width: 38px; align-self: center; height: 2px; position: relative; background: linear-gradient(90deg, var(--a), var(--b)); opacity: .65; flex: none; }
+.link::after { content: ""; position: absolute; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: #fff; box-shadow: 0 0 10px var(--a); animation: run 2.2s linear infinite; }
+@keyframes run { from { left: 0; } to { left: calc(100% - 8px); } }
+@media (max-width: 860px) { .flow-row { flex-direction: column; } .link { width: 2px; height: 24px; margin: 0 auto; background: linear-gradient(var(--a), var(--b)); } .link::after { display: none; } }
+
+.kicker { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.card::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .25s; background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(34,211,197,.16), transparent 60%); }
+.card:hover::after { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .orb, .tk, .link::after, .cdot, .log .cur { animation: none; } }
