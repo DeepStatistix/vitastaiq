@@ -33,6 +33,7 @@ jobs:
       - name: Refresh live mandi data
         if: env.DATA_GOV_API_KEY != ''
         continue-on-error: true
+        timeout-minutes: 8   # a slow data.gov.in must never block the deploy
         run: python3 site/demo/mandi/fetch_live.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
