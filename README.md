@@ -32,6 +32,11 @@ python site/demo/mandi/fetch_live.py
 The key is read from the environment (or a `.env` passed with `--env`) and is never written to the output.
 `build.py` builds the archived trend from downloaded Agmarknet CSV exports.
 
+**Daily refresh.** Fetching from GitHub's servers timed out every time, so the refresh runs on a PC instead:
+`scripts/refresh_live_data.ps1` (run by a Windows scheduled task) fetches, checks the result, commits only
+`site/demo/mandi/live.js` and pushes it from a dedicated clone, which triggers the Pages deploy. It keeps the existing
+data if the fetch fails or returns too little. Test it safely with `-DryRun`. Logs: `%LOCALAPPDATA%\VitastaIQ\refresh.log`.
+
 Data: Agmarknet via the Open Government Data Platform India (Government Open Data License - India).
 The feed has no unit field, so the script converts apparent Rs/kg records to Rs/quintal and excludes retail
 farmer markets (Uzhavar Sandhai); counts are shown on the page.
