@@ -1,12 +1,13 @@
 name: Deploy site to GitHub Pages
 
+# The mandi dashboard data (site/demo/mandi/live.js) is refreshed from a PC with
+# site/demo/mandi/fetch_live.py and committed, which triggers this deploy. Fetching from
+# GitHub's servers timed out every time, so it is deliberately not done here.
 on:
   push:
     branches: [main]
     paths: ["site/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
-  schedule:
-    - cron: "30 13 * * *"   # 19:00 IST daily, after most mandis have reported for the day
 
 permissions:
   contents: read
@@ -20,21 +21,12 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 10
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    env:
-      DATA_GOV_API_KEY: ${{ secrets.DATA_GOV_API_KEY }}
     steps:
       - uses: actions/checkout@v4
-      # Refresh the mandi dashboard data. Fails soft: if the secret is missing, data.gov.in is
-      # unreachable, or too few records come back, the site deploys with the data already committed.
-      - name: Refresh live mandi data
-        if: env.DATA_GOV_API_KEY != ''
-        continue-on-error: true
-        timeout-minutes: 8   # a slow data.gov.in must never block the deploy
-        run: python3 site/demo/mandi/fetch_live.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
