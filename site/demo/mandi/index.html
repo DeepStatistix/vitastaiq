@@ -44,9 +44,8 @@
   <div class="panel"><h2>Daily arrivals (metric tonnes)</h2><div class="chart" id="arrChart"></div></div>
   <div class="panel"><h2>By state: last 7 days vs previous 7 days</h2><div class="scroll"><table id="states"></table></div></div>
   <div class="panel"><h2>Ten busiest markets (last 7 days)</h2><div class="scroll"><table id="markets"></table></div></div>
-  <p class="note">Source: public Agmarknet daily price and arrival reports. Average prices are weighted by arrival quantity; days with unusually few reporting markets are excluded. Sample dashboard by Vitasta Labs. For information only, not trading advice.</p>
+  <p class="note">Source: public Agmarknet daily price and arrival reports. Average prices are weighted by arrival quantity; days with unusually few reporting markets are excluded. Sample dashboard by VitastaIQ. For information only, not trading advice.</p>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.2/plotly.min.js"></script>
 <script src="data.js"></script>
 <script>
 (function () {
@@ -63,11 +62,37 @@
     el.innerHTML = "<thead><tr>" + head.map(function (h) { return "<th>" + h + "</th>"; }).join("") + "</tr></thead><tbody>" +
       rows.map(function (r) { return "<tr>" + r.map(function (c) { return "<td>" + c + "</td>"; }).join("") + "</tr>"; }).join("") + "</tbody>";
   }
-  function layout(extra) {
-    return Object.assign({
-      margin: { l: 56, r: 12, t: 8, b: 36 }, paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor: "rgba(0,0,0,0)",
-      font: { color: css("--fg") }, xaxis: { gridcolor: css("--line") }, yaxis: { gridcolor: css("--line") }
-    }, extra || {});
+  /* Dependency-free SVG charts. kind: "line" | "bar". pts: [{x: label, y: number, tip: string}] */
+  function chart(id, pts, kind) {
+    var el = $(id), W = Math.max(el.clientWidth, 300), H = 320;
+    var L = 58, R = 12, T = 10, B = 30, iw = W - L - R, ih = H - T - B;
+    var ys = pts.map(function (p) { return p.y; });
+    var lo = kind === "bar" ? 0 : Math.min.apply(null, ys), hi = Math.max.apply(null, ys);
+    var pad = (hi - lo) * 0.08 || 1; hi += pad; if (kind === "line") lo = Math.max(0, lo - pad);
+    var sy = function (v) { return T + ih - (v - lo) / (hi - lo) * ih; };
+    var step = iw / pts.length, sx = function (i) { return L + step * (i + 0.5); };
+    var s = '<svg width="' + W + '" height="' + H + '" role="img" style="display:block">';
+    for (var t = 0; t <= 4; t++) {
+      var v = lo + (hi - lo) * t / 4, y = sy(v);
+      s += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y + '" y2="' + y + '" style="stroke:var(--line)"/>' +
+           '<text x="' + (L - 6) + '" y="' + (y + 4) + '" text-anchor="end" font-size="11" style="fill:var(--muted)">' + fmt(v) + "</text>";
+    }
+    var every = Math.ceil(pts.length / Math.max(2, Math.floor(iw / 70)));
+    pts.forEach(function (p, i) {
+      if (i % every === 0) s += '<text x="' + sx(i) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="11" style="fill:var(--muted)">' + p.x.slice(5) + "</text>";
+    });
+    if (kind === "bar") {
+      var bw = Math.max(2, step * 0.7);
+      pts.forEach(function (p, i) {
+        s += '<rect x="' + (sx(i) - bw / 2) + '" y="' + sy(p.y) + '" width="' + bw + '" height="' + (T + ih - sy(p.y)) + '" rx="2" style="fill:var(--accent)"><title>' + p.tip + "</title></rect>";
+      });
+    } else {
+      s += '<polyline fill="none" stroke-width="2" style="stroke:var(--accent)" points="' + pts.map(function (p, i) { return sx(i) + "," + sy(p.y); }).join(" ") + '"/>';
+      pts.forEach(function (p, i) {
+        s += '<circle cx="' + sx(i) + '" cy="' + sy(p.y) + '" r="4" style="fill:var(--accent)"><title>' + p.tip + "</title></circle>";
+      });
+    }
+    el.innerHTML = s + "</svg>";
   }
 
   function render() {
@@ -83,11 +108,8 @@
       '<div class="stat"><div class="k">Avg daily arrivals</div><div class="v">' + fmt(aNow) + ' t</div><div class="d">last 7 days</div></div>' +
       '<div class="stat"><div class="k">Markets reporting</div><div class="v">' + fmt(avg(w, "markets")) + '</div><div class="d">per day, last 7 days</div></div>';
 
-    var x = d.map(function (r) { return r.date; });
-    Plotly.react("priceChart", [{ x: x, y: d.map(function (r) { return r.price; }), type: "scatter", mode: "lines+markers", line: { color: css("--accent"), width: 2 }, hovertemplate: "%{x}<br>Rs %{y:,.0f}<extra></extra>" }],
-      layout({ yaxis: { gridcolor: css("--line"), title: "Rs/quintal" } }), { displayModeBar: false, responsive: true });
-    Plotly.react("arrChart", [{ x: x, y: d.map(function (r) { return r.arrival; }), type: "bar", marker: { color: css("--accent") }, hovertemplate: "%{x}<br>%{y:,.0f} t<extra></extra>" }],
-      layout({ yaxis: { gridcolor: css("--line"), title: "tonnes" } }), { displayModeBar: false, responsive: true });
+    chart("priceChart", d.map(function (r) { return { x: r.date, y: r.price, tip: r.date + ": Rs " + fmt(r.price) + " per quintal" }; }), "line");
+    chart("arrChart", d.map(function (r) { return { x: r.date, y: r.arrival, tip: r.date + ": " + fmt(r.arrival) + " t" }; }), "bar");
 
     table($("states"), ["State", "Price (Rs/q)", "Change", "Arrivals (t)", "Markets"],
       c.states.slice(0, 15).map(function (s) { return [s.state, fmt(s.price), pct(s.change_pct), fmt(s.arrival), s.markets]; }));
@@ -102,7 +124,7 @@
     Array.prototype.forEach.call($("tabs").children, function (x) { x.setAttribute("aria-pressed", x.dataset.n === cur); });
     render();
   });
-  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+  window.addEventListener("resize", render);
   render();
 })();
 </script>

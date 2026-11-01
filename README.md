@@ -1,4 +1,4 @@
-# Vitasta Labs
+# VitastaIQ
 
 Data, automation and AI services from Kashmir, for local businesses, researchers and learners.
 
