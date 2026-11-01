@@ -162,6 +162,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--env")
     ap.add_argument("--out", default=str(Path(__file__).parent / "live.js"))
+    ap.add_argument("--min-rows", type=int, default=1500,
+                    help="refuse to overwrite the output when fewer records than this were fetched")
     a = ap.parse_args()
     key = find_key(a.env)
     rows = []
@@ -173,8 +175,8 @@ def main():
             continue
         print(f"  {st}: {len(got)} rows")
         rows += got
-    if not rows:
-        sys.exit("no rows fetched")
+    if len(rows) < a.min_rows:
+        sys.exit(f"only {len(rows)} records fetched (minimum {a.min_rows}); keeping the existing output")
     data = aggregate(rows)
     Path(a.out).write_text("window.LIVE=" + json.dumps(data, separators=(",", ":")) + ";", encoding="utf-8")
     print(f"date {data['date']}: {data['rows']} rows, {data['markets']} markets, {data['states']} states, "

@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths: ["site/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
+  schedule:
+    - cron: "30 13 * * *"   # 19:00 IST daily, after most mandis have reported for the day
 
 permissions:
   contents: read
@@ -18,11 +20,20 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      DATA_GOV_API_KEY: ${{ secrets.DATA_GOV_API_KEY }}
     steps:
       - uses: actions/checkout@v4
+      # Refresh the mandi dashboard data. Fails soft: if the secret is missing, data.gov.in is
+      # unreachable, or too few records come back, the site deploys with the data already committed.
+      - name: Refresh live mandi data
+        if: env.DATA_GOV_API_KEY != ''
+        continue-on-error: true
+        run: python3 site/demo/mandi/fetch_live.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

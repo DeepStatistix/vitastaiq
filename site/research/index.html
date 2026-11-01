@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Research</title>
+  <meta name="description" content="Research behind VitastaIQ: forecasting, experimental design and applied statistics, with 17 journal articles, a preprint, 4 book chapters and 5 conference presentations.">
+  <style>
+    :root { color-scheme: dark; --bg:#070b14; --bg2:#0d1424; --card:rgba(255,255,255,.045); --line:rgba(255,255,255,.09); --fg:#e9eef7; --muted:#8c9ab3; --a:#22d3c5; --b:#6aa8ff; --warm:#ffb454; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--fg); font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif; min-height:100vh;
+      background: radial-gradient(900px 500px at 85% -10%, rgba(34,211,197,.14), transparent 60%), radial-gradient(700px 420px at -10% 10%, rgba(106,168,255,.13), transparent 60%), linear-gradient(var(--bg), var(--bg2)) fixed; }
+    body::before { content:""; position:fixed; inset:0; pointer-events:none; opacity:.3; background-image:linear-gradient(var(--line) 1px, transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px); background-size:44px 44px; -webkit-mask-image:radial-gradient(ellipse at 50% 0%,#000,transparent 70%); mask-image:radial-gradient(ellipse at 50% 0%,#000,transparent 70%); }
+    a { color:var(--a); }
+    .wrap { position:relative; max-width:1060px; margin:0 auto; padding:22px 16px 56px; }
+    .glass { background:var(--card); border:1px solid var(--line); border-radius:16px; backdrop-filter:blur(6px); }
+    header { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:26px; }
+    .logo { font-weight:750; } .logo b { background:linear-gradient(90deg,var(--a),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .logo a { color:var(--muted); font-weight:500; text-decoration:none; font-size:.9rem; margin-left:10px; }
+    h1 { font-size:clamp(1.9rem,5vw,3rem); line-height:1.1; margin:0 0 10px; letter-spacing:-.02em; }
+    h1 span { background:linear-gradient(90deg,var(--a),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .lede { color:var(--muted); max-width:66ch; margin:0 0 22px; }
+    .kicker { color:var(--a); font:650 .78rem ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; text-transform:uppercase; letter-spacing:.14em; }
+    h2 { font-size:clamp(1.4rem,3vw,1.9rem); margin:6px 0 6px; letter-spacing:-.02em; }
+    section { margin-top:46px; }
+    .sub { color:var(--muted); max-width:64ch; margin:0 0 16px; }
+    .counts { display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); }
+    .count { padding:16px 18px; } .count .n { font-size:2.1rem; font-weight:800; letter-spacing:-.02em; font-variant-numeric:tabular-nums; } .count .l { color:var(--muted); font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; }
+    .find { display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); }
+    .find .f { padding:18px; border-left:3px solid var(--a); } .find .f b { display:block; margin-bottom:4px; } .find .f span { color:var(--muted); font-size:.92rem; }
+    .feat { display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); }
+    .card { padding:20px; transition:transform .2s,border-color .2s; } .card:hover { transform:translateY(-3px); border-color:rgba(34,211,197,.5); }
+    .card .v { color:var(--a); font:600 .76rem ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:.06em; text-transform:uppercase; }
+    .card h3 { margin:6px 0; font-size:1.08rem; } .card p { color:var(--muted); font-size:.92rem; margin:0 0 10px; }
+    .tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; } .tags i { font-style:normal; font-size:.74rem; color:var(--muted); border:1px solid var(--line); border-radius:99px; padding:1px 9px; }
+    .links a { margin-right:14px; font-size:.9rem; }
+    .controls { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px; }
+    .chip { font:inherit; font-size:.88rem; color:var(--fg); background:transparent; border:1px solid var(--line); border-radius:99px; padding:6px 14px; cursor:pointer; } .chip:hover { border-color:var(--a); }
+    .chip[aria-pressed="true"] { color:#04121a; border-color:transparent; font-weight:650; background:linear-gradient(90deg,var(--a),var(--b)); }
+    input[type=search] { font:inherit; color:var(--fg); background:rgba(0,0,0,.3); border:1px solid var(--line); border-radius:10px; padding:8px 12px; min-width:230px; } input[type=search]:focus { outline:2px solid var(--a); outline-offset:1px; }
+    .list { display:grid; gap:10px; }
+    .item { padding:14px 18px; display:grid; grid-template-columns:54px 1fr; gap:12px; }
+    .item .y { color:var(--muted); font-variant-numeric:tabular-nums; font-weight:650; }
+    .item .t { font-weight:600; } .item .au { color:var(--muted); font-size:.88rem; } .item .au b { color:var(--fg); }
+    .item .ve { color:var(--muted); font-size:.85rem; } .badge { font-size:.68rem; letter-spacing:.07em; text-transform:uppercase; border:1px solid rgba(255,180,84,.5); color:var(--warm); border-radius:99px; padding:1px 8px; margin-left:6px; vertical-align:2px; }
+    .two { display:grid; gap:16px; grid-template-columns:1fr 1fr; } @media (max-width:800px) { .two { grid-template-columns:1fr; } }
+    .box { padding:20px; } .box h3 { margin:0 0 8px; } .box ul { margin:0; padding-left:18px; color:var(--muted); font-size:.92rem; } .box li { margin:4px 0; }
+    .empty { color:var(--muted); padding:20px; text-align:center; }
+    .cta { margin-top:46px; padding:26px; text-align:center; } .btn { display:inline-block; margin-top:8px; padding:12px 24px; border-radius:10px; text-decoration:none; font-weight:650; color:#04121a; background:linear-gradient(90deg,var(--a),var(--b)); }
+    .note { color:var(--muted); font-size:.8rem; margin-top:30px; border-top:1px solid var(--line); padding-top:14px; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header><div class="logo">Vitasta<b>IQ</b> <span style="color:var(--muted);font-weight:500">/ Research</span><a href="../index.html">&larr; Home</a><a href="../demo/forecast/index.html">Forecast Lab</a><a href="../demo/samplesize/index.html">Sample Size Calculator</a></div></header>
+
+  <h1>Research that <span>gets used.</span></h1>
+  <p class="lede">The methods behind our dashboards, forecasts and analyses are the ones published in peer-reviewed journals. The central question: which forecast can we trust, and how do we show the uncertainty to the people who decide?</p>
+
+  <div class="counts" id="counts"></div>
+
+  <section>
+    <div class="kicker">What the work found</div>
+    <h2>Findings we build on</h2>
+    <p class="sub">From the forecasting programme behind the Market Intelligence Cell platform, as reported in the author's portfolio and papers.</p>
+    <div class="find">
+      <div class="f glass"><b>No universal winner</b><span>On the 2024 hold-out, 9 of 11 model families were best for at least one series.</span></div>
+      <div class="f glass"><b>Complexity is not a guarantee</b><span>The Transformer was best on one series and last on 35 of 78.</span></div>
+      <div class="f glass"><b>Live season test</b><span>In the 2026 cherry season, reviewed forecasts had an error of 18.3% against 27.5% for the naive benchmark, winning on 11 of 13 series with 93% interval coverage.</span></div>
+      <div class="f glass"><b>Tuned ensembles win at home</b><span>The PhD thesis stacking ensemble, tuned per market, gave the lowest error in all six apple markets (MAPE 1.1 to 3.0%).</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="kicker">Featured</div>
+    <h2>Four pieces to start with</h2>
+    <div class="feat">
+      <article class="card glass"><div class="v">Journal of Hydrology &middot; 2026</div><h3>HydroGRAF: streamflow forecasting in the Himalayas</h3><p>Graph attention restricted to the river network. It reconstructs up to 40% missing discharge across 15 Jhelum stations and gives calibrated 1 to 4-week forecasts for irrigation and disaster planning.</p><div class="tags"><i>Graph attention</i><i>Gap-filling</i><i>Coverage 0.94 to 0.96</i></div><div class="links"><a href="https://doi.org/10.1016/j.jhydrol.2026.135479">Paper</a><a href="https://github.com/DeepStatistix/HydroGRAF">Code</a></div></article>
+      <article class="card glass"><div class="v">Scientific Reports &middot; 2026 &middot; 16:1582</div><h3>Deep-learning cherry price forecasting across supply chains</h3><p>Six model families compared on 2012 to 2024 daily prices in five markets. The best model went live in the 2025 season with about 92 to 94% accuracy.</p><div class="tags"><i>LSTM</i><i>Diebold-Mariano</i><i>Live deployment</i></div><div class="links"><a href="https://doi.org/10.1038/s41598-025-30980-9">Paper</a></div></article>
+      <article class="card glass"><div class="v">Computational Economics &middot; 2025 &middot; sole author</div><h3>A hybrid ensemble for stock price prediction</h3><p>Bagging, boosting, dagging and stacking combined through a meta-learner. On the chronological test set it had MSE 53.4, against 75.7, 149.3 and 171.9 for the single strategies.</p><div class="tags"><i>Ensembles</i><i>Finance</i></div><div class="links"><a href="https://doi.org/10.1007/s10614-025-10979-0">Paper</a><a href="https://github.com/DeepStatistix/Hybrid-Ensemble-Model">Code</a></div></article>
+      <article class="card glass"><div class="v">arXiv 2603.09041 &middot; Python package</div><h3>AgroDesign: design-aware statistical inference</h3><p>You declare the experimental design (CRD, RCBD, factorial, split-plot, multi-environment). AgroDesign builds the correct model and error strata, then runs ANOVA, mean separation, mixed models and G&times;E stability.</p><div class="tags"><i>pip install agrodesign</i><i>Open source</i></div><div class="links"><a href="https://arxiv.org/abs/2603.09041">Preprint</a><a href="https://github.com/DeepStatistix/AgroDesign">Code</a></div></article>
+    </div>
+  </section>
+
+  <section>
+    <div class="kicker">Full list</div>
+    <h2>Publications &amp; presentations</h2>
+    <p class="sub">First-author forecasting research, plus collaborations across agriculture, engineering and economics where Dr. Gul led or supported the statistical design and analysis.</p>
+    <div class="controls">
+      <div id="filters" role="group" aria-label="Filter publications"></div>
+      <input type="search" id="q" placeholder="Search title, venue or co-author" aria-label="Search publications">
+    </div>
+    <div class="list" id="list" aria-live="polite"></div>
+  </section>
+
+  <section class="two">
+    <div class="box glass"><h3>Teaching &amp; training</h3><ul>
+      <li>Teaching assistant and co-instructor, SKUAST-Kashmir, Jul 2023 to Dec 2024 (statistical methods, data analysis with statistical packages, statistical computing)</li>
+      <li>Invited lecture, Dec 2025: <a href="https://github.com/DeepStatistix/Basic-Time-Series">Basic Time Series Analysis Using R</a>, 10-day winter school on data-driven AI and analysis with SPSS and R</li>
+      <li>Invited lecture, Jul to Aug 2025: Smart Farming with Smart Data, capacity-building programme for Rural Business Service Hubs (HADP)</li>
+    </ul></div>
+    <div class="box glass"><h3>Peer review &amp; service</h3><ul>
+      <li>Reviewer for 18 manuscripts across 11 journals (2025 to 2026), mainly on statistical methods and machine learning, including Scientific Reports, Computational Economics, Safety and Health at Work, Discover Applied Sciences and Frontiers in Plant Science</li>
+      <li>Coordinator or co-coordinator of capacity-building programmes for rural entrepreneurs and agri-branding (HADP and SKUAST-K, 2025)</li>
+      <li>Co-inventor on two registered Indian designs, including a crop-quality AI device</li>
+    </ul></div>
+  </section>
+
+  <div class="cta glass"><h2 style="margin-top:0">Need this rigour on your own data?</h2><p class="sub" style="margin:0 auto 6px">Thesis statistics, forecasting, dashboards and analysis for organisations.</p><a class="btn" href="../index.html#contact">Start a project</a></div>
+
+  <p class="note">Source: the author's portfolio at <a href="https://deepstatistix.github.io/">deepstatistix.github.io</a>, which has the latest details. Counts follow the portfolio: 17 journal articles (some listed as accepted or in press), plus one arXiv preprint, 4 book chapters and 5 conference presentations.</p>
+</div>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+  /* type: j journal, p preprint, b book chapter, c conference; first: Dr. Gul is first or sole author */
+  var P = [
+    { y: "2026", ty: "j", f: 1, t: "HydroGRAF: Hybrid discharge reconstruction and basin-aware streamflow forecasting in the Himalayas.", a: "Gul, A., Shaheen, F. A., & Majid, M.", v: "Journal of Hydrology, 135479", d: "10.1016/j.jhydrol.2026.135479" },
+    { y: "2026", ty: "j", f: 0, t: "Deep learning-enabled cherry price forecasting and real-time system deployment across multi-market supply chains in India.", a: "Shaheen, F. A., Gul, A., Ganai, N., Majid, M., Rashid, M., & Sultan, A.", v: "Scientific Reports 16:1582 (co-corresponding)", d: "10.1038/s41598-025-30980-9" },
+    { y: "2025", ty: "j", f: 1, t: "A novel hybrid ensemble framework for stock price prediction: Combining bagging, boosting, dagging, and stacking.", a: "Gul, A.", v: "Computational Economics (sole author)", d: "10.1007/s10614-025-10979-0" },
+    { y: "2025", st: "In press", ty: "j", f: 1, t: "Impact of temporal granularity on machine learning models for time-series forecasting.", a: "Gul, A., Khan, I., Mir, S. A., Nazir, N., Shaheen, F. A., & Dar, Z. A.", v: "SKUAST Journal of Research", d: "10.5958/2349297X.2025.00062.3" },
+    { y: "2026", st: "Preprint", ty: "p", f: 1, t: "AgroDesign: A design-aware statistical inference framework for agricultural experiments in Python.", a: "Gul, A.", v: "arXiv:2603.09041", d: "10.48550/arXiv.2603.09041" },
+    { y: "2026", ty: "j", f: 0, t: "Evaluating the effects of soil and water conservation measures on soil moisture regimes and crop performance in Jammu's rainfed agroecosystems.", a: "Khan, Z. A., Srivastava, R. K., Gul, A., et al.", v: "Scientific Reports", d: "10.1038/s41598-026-61203-4" },
+    { y: "2026", st: "Accepted", ty: "j", f: 0, t: "Design, development, and performance evaluation of a vertical hydroponic system for fodder crop production.", a: "Khan, Z. A., Khan, J. N., Gul, A., et al.", v: "BMC Plant Biology", d: "10.1186/s12870-026-09585-5" },
+    { y: "2026", ty: "j", f: 0, t: "Defining the developmental window and physiological requirements for efficient in ovulo embryo rescue in seedless grape.", a: "Bhat, S. N., Lone, I. A., Zargar, S. M., Gul, A., et al.", v: "Plant Cell, Tissue and Organ Culture 166, 70", d: "10.1007/s11240-026-03574-0" },
+    { y: "2026", ty: "j", f: 0, t: "Assessing instability and decomposition of factors contributing to pear crop production variability in Kashmir.", a: "Bashir, A., Khan, I., Gul, A., et al.", v: "Agricultural Economics Research Review", d: "10.1177/09713441261452808" },
+    { y: "2025", ty: "j", f: 1, t: "Evaluating diameter distribution models for coniferous forests in the northwestern Himalayas.", a: "Gul, A., Nazir, N., Khan, I., et al.", v: "AATCC Review 13(4), 140-150", d: "10.21276/AATCCReview.2025.13.04.140" },
+    { y: "2025", ty: "j", f: 0, t: "Profiling difenoconazole and flusilazole resistance, fitness penalty and phenotypic stability in Venturia inaequalis.", a: "Mubashir, S. S., et al., Gul, A.", v: "Scientific Reports 15, 4855", d: "10.1038/s41598-025-89536-6" },
+    { y: "2025", ty: "j", f: 0, t: "Occupational health impacts of tractor noise and its attenuation through ergonomic interventions.", a: "Mushtaq, S. A., Gul, A., & Dixit, J.", v: "Journal of Biosystems Engineering", d: "10.1007/s42853-025-00261-4" },
+    { y: "2025", ty: "j", f: 0, t: "Effect of induced defoliation on apple nursery plants grown under protected conditions in the northwestern Himalayan region.", a: "Lone, J. A., Dar, J. A., et al., Gul, A., et al.", v: "AATCC Review 13(1), 77-84", d: "10.21276/AATCCReview.2025.13.01.77" },
+    { y: "2025", ty: "j", f: 0, t: "Breeding vines: Unlocking the grapevine pollination dynamics and potential for hybridization in the temperate region of Kashmir Valley.", a: "Bhat, S. N., et al., Gul, A., et al.", v: "Journal of Community Mobilization and Sustainable Development 20", d: "10.5958/2231-6736.2025.00080.7" },
+    { y: "2024", ty: "j", f: 0, t: "An economic insight of agricultural sustainability in the Himalayan districts of Jammu and Kashmir, India.", a: "Murugesan, S., Baba, S. H., Majeed, U., Gul, A., et al.", v: "Journal of Scientific Research and Reports 30(9), 159-173" },
+    { y: "2024", ty: "j", f: 0, t: "Impact of power tiller noise on the occupational health of Indian farmers: A case study of Jammu and Kashmir.", a: "Mushtaq, S. A., Dixit, J., Gul, A., et al.", v: "Journal of Agricultural Engineering (India) 61(6), 807-816", d: "10.52151/jae2024616.1898" },
+    { y: "2024", ty: "j", f: 0, t: "Enhancing regression models: Classical and ridge regression under multicollinearity in high-density apple data.", a: "Kulsum, U., Khan, I., Gul, A., et al.", v: "International Journal of Statistics and Applied Mathematics 9(5)", d: "10.22271/maths.2024.v9.i5Sa.1804" },
+    { y: "2023", ty: "j", f: 1, t: "Regression models for tree volume prediction in Pinus wallichiana stands of the south-western Himalayan region of Kashmir.", a: "Gul, A., Bhat, B. A., Nazir, N., & Pukhta, M. S.", v: "Journal of the Indian Society of Agricultural Statistics 78(2), 143-150", d: "10.56093/jisas.v78i02.171361" },
+    { y: "2026", ty: "b", f: 0, t: "Agricultural entrepreneurship in operational management.", a: "Rashid, M., Sultan, A., Shaheen, F. A., Gul, A., et al.", v: "In Robotics and Intelligent Machines in Smart Agriculture. CRC Press", d: "10.1201/9781003562627-11" },
+    { y: "2026", ty: "b", f: 1, t: "Data analytics and decision making in agricultural marketing.", a: "Gul, A.", v: "In Agriculture Branding and Market Intelligence: Insights for Sustainable Growth. New India Publishing Agency" },
+    { y: "2026", ty: "b", f: 0, t: "Market intelligence for supply chain optimization in Indian agriculture.", a: "Kachroo, M. M., Fardous, F., Rashid, M., Gul, A., et al.", v: "In Agriculture Branding and Market Intelligence. New India Publishing Agency" },
+    { y: "2025", ty: "b", f: 1, t: "Leveraging artificial intelligence for predictive modeling in agriculture.", a: "Gul, A.", v: "In Latest Trends in Agriculture Sciences, Vol. 8. Integrated Publications", d: "10.62778/int.book.580" },
+    { y: "2026", ty: "c", f: 1, t: "AI-driven decision support framework for agricultural price risk management in Himalayan horticulture.", a: "Gul, A., et al.", v: "AERA Regional Conference on Building Resilient Himalayan Agriculture" },
+    { y: "2025", ty: "c", f: 1, t: "Hybrid ensemble intelligence for market-specific agricultural price forecasting.", a: "Gul, A.", v: "5th LISA Global Symposium (virtual), World Statistics Day" },
+    { y: "2024", ty: "c", f: 1, t: "Machine learning for finfluencer regulation: A framework for identifying unauthorized financial advice.", a: "Gul, A.", v: "Fifth Annual International Research Conference on Securities Market, NISM, Patalganga" },
+    { y: "2024", ty: "c", f: 1, t: "Integrating artificial intelligence into decision support systems for enhanced agricultural market information.", a: "Gul, A.", v: "JK Agri-Med Science Congress, SKUAST-K" },
+    { y: "2022", ty: "c", f: 1, t: "Regression models for tree volume prediction in Pinus wallichiana stands of the south-western Himalayas of Kashmir.", a: "Gul, A., et al.", v: "73rd Annual Conference of the Indian Society of Agricultural Statistics" }
+  ];
+  var count = function (fn) { return P.filter(fn).length; };
+  $("counts").innerHTML = [
+    [count(function (x) { return x.ty === "j"; }), "Journal articles"], [count(function (x) { return x.ty === "p"; }), "Preprint"],
+    [count(function (x) { return x.ty === "b"; }), "Book chapters"], [count(function (x) { return x.ty === "c"; }), "Conference talks"],
+    [count(function (x) { return x.f === 1 && x.ty !== "c"; }), "First or sole author"]
+  ].map(function (c) { return '<div class="count glass"><div class="n">' + c[0] + '</div><div class="l">' + c[1] + "</div></div>"; }).join("");
+
+  var FIL = [["all", "All"], ["first", "First / sole author"], ["j", "Journal articles"], ["b", "Book chapters"], ["c", "Conferences"]], cur = "all", term = "";
+  function chips() { $("filters").innerHTML = FIL.map(function (f) { return '<button type="button" class="chip" data-f="' + f[0] + '" aria-pressed="' + (f[0] === cur) + '">' + f[1] + "</button>"; }).join(" "); }
+  function draw() {
+    var rows = P.filter(function (x) {
+      if (cur === "first" && !x.f) return false;
+      if (cur === "j" && x.ty !== "j" && x.ty !== "p") return false;
+      if ((cur === "b" || cur === "c") && x.ty !== cur) return false;
+      return !term || (x.t + " " + x.a + " " + x.v).toLowerCase().indexOf(term) >= 0;
+    });
+    $("list").innerHTML = rows.length ? rows.map(function (x) {
+      var au = esc(x.a).replace(/Gul, A\./g, "<b>Gul, A.</b>");
+      return '<div class="item glass"><div class="y">' + x.y + '</div><div><div class="t">' + (x.d ? '<a href="https://doi.org/' + x.d + '" style="color:inherit">' + esc(x.t) + "</a>" : esc(x.t)) +
+        (x.st ? '<span class="badge">' + x.st + "</span>" : "") + '</div><div class="au">' + au + '</div><div class="ve">' + esc(x.v) + "</div></div></div>";
+    }).join("") : '<div class="empty glass">No matches.</div>';
+  }
+  $("filters").addEventListener("click", function (e) { var b = e.target.closest && e.target.closest("button"); if (!b) return; cur = b.getAttribute("data-f"); chips(); draw(); });
+  $("q").addEventListener("input", function () { term = $("q").value.trim().toLowerCase(); draw(); });
+  chips(); draw();
+})();
+</script>
+</body>
+</html>
