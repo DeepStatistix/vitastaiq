@@ -4,25 +4,27 @@ Data, automation and AI services from Kashmir, for local businesses, researchers
 
 ## Layout
 
-| Folder | Purpose |
+| Path | Purpose |
 |---|---|
-| `site/` | Static website (plain HTML/CSS, deployable to Vercel/Netlify/GitHub Pages) |
-| `services/` | Service offers, scope and draft pricing |
-| `content/` | Blog posts, course and tutorial material |
-| `docs/` | Brand notes, outreach plan, decisions |
+| `site/` | Static website (plain HTML/CSS), deployed to GitHub Pages by `.github/workflows/pages.yml` |
+| `site/demo/mandi/` | Mandi Intelligence dashboard built on public Agmarknet data from data.gov.in |
 
-## Service lines (launch)
+Internal planning documents (pricing, outreach, brand notes) are kept in a separate private repository.
 
-1. Business Data & Automation
-2. Research & Analytics Support
-3. Learn (courses and tutoring)
+## Mandi Intelligence dashboard
 
-Later: tools and datasets, forecasting subscriptions, local digital services.
+Open `site/demo/mandi/index.html` in a browser, or run `python -m http.server 8000 --directory site`.
 
-## Preview the site
+To refresh the live data (standard library only; needs a free data.gov.in API key):
 
-Open `site/index.html` in a browser, or run `python -m http.server 8000 --directory site`.
+```
+set DATA_GOV_API_KEY=<your key>
+python site/demo/mandi/fetch_live.py
+```
 
-## Status
+The key is read from the environment (or a `.env` passed with `--env`) and is never written to the output.
+`build.py` builds the archived trend from downloaded Agmarknet CSV exports.
 
-Draft. Placeholders marked `TODO` in the site and docs (contact details, pricing, portfolio links) need real values before launch.
+Data: Agmarknet via the Open Government Data Platform India (Government Open Data License - India).
+The feed has no unit field, so the script converts apparent Rs/kg records to Rs/quintal and excludes retail
+farmer markets (Uzhavar Sandhai); counts are shown on the page.
