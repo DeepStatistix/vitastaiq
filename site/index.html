@@ -14,7 +14,7 @@
   <header class="top">
     <div class="wrap">
       <a class="brand" href="#">Vitasta<span>IQ</span></a>
-      <nav aria-label="Main">
+      <nav aria-label="Main" id="mainnav">
         <a href="#services">Services</a>
         <a href="#demo">Live demo</a>
         <a href="research/index.html">Research</a>
@@ -23,6 +23,7 @@
         <a href="#faq">FAQ</a>
         <a class="cta" href="#contact">Start a project</a>
       </nav>
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mainnav">&#9776;</button>
     </div>
   </header>
 
@@ -179,6 +180,7 @@
         <div class="demo glass rv">
           <div class="bar"><i></i><i></i><i></i><span>VitastaIQ &middot; Mandi Intelligence</span></div>
           <iframe src="demo/mandi/index.html" title="Mandi Intelligence dashboard" loading="lazy"></iframe>
+          <p class="only-phone">The dashboard works best full screen on a phone. Tap the button below to open it.</p>
           <div class="row"><span>Live data, refreshed from data.gov.in.</span><a class="btn primary" href="demo/mandi/index.html">Open full dashboard</a></div>
         </div>
         <div class="policy glass rv" style="margin-top:16px;border-left-color:var(--a)"><strong>Also try: Price Forecast Lab.</strong> Twelve-week mandi price forecasts for onion, tomato and potato across states, each with a rolling backtest, naive baselines and prediction-interval checks. Honest about what works and what doesn't. <a href="demo/forecast/index.html">Open the Forecast Lab &rarr;</a></div>
@@ -425,6 +427,14 @@
     Array.prototype.forEach.call(rv, function (x) { io.observe(x); });
   } else { Array.prototype.forEach.call(rv, function (x) { x.classList.add("in"); }); }
   runCounts();
+
+  /* mobile menu */
+  var mb = document.getElementById("menuBtn"), mn = document.getElementById("mainnav");
+  function setMenu(open) { mn.classList.toggle("open", open); mb.setAttribute("aria-expanded", open ? "true" : "false"); mb.setAttribute("aria-label", open ? "Close menu" : "Open menu"); }
+  mb.addEventListener("click", function () { setMenu(!mn.classList.contains("open")); });
+  mn.addEventListener("click", function (e) { if (e.target.closest("a")) setMenu(false); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") setMenu(false); });
+  document.addEventListener("click", function (e) { if (!e.target.closest("header.top")) setMenu(false); });
 
   /* service filter */
   document.getElementById("filters").addEventListener("click", function (e) {

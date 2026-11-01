@@ -34,7 +34,7 @@ nav a.cta { color: #04121a; background: linear-gradient(90deg, var(--a), var(--b
 @media (max-width: 760px) { nav a:not(.cta) { display: none; } }
 
 /* hero */
-.hero { padding: 84px 0 40px; }
+.hero { padding: 84px 16px 40px; }
 .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: .82rem; color: var(--muted); padding: 6px 12px; border-radius: 99px; margin-bottom: 18px; }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--a); box-shadow: 0 0 0 0 rgba(34,211,197,.7); animation: pulse 1.8s infinite; }
 @keyframes pulse { 70% { box-shadow: 0 0 0 10px rgba(34,211,197,0); } 100% { box-shadow: 0 0 0 0 rgba(34,211,197,0); } }
@@ -173,3 +173,17 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
 .card::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .25s; background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(34,211,197,.16), transparent 60%); }
 .card:hover::after { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .orb, .tk, .link::after, .cdot, .log .cur { animation: none; } }
+
+/* ---- phones ---- */
+.menu-btn { display: none; }
+.only-phone { display: none; margin: 8px 6px 0; color: var(--muted); font-size: .9rem; }
+@media (max-width: 760px) {
+  .menu-btn { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--fg); font-size: 1.25rem; cursor: pointer; }
+  nav { display: none; position: absolute; top: 58px; left: 12px; right: 12px; flex-direction: column; align-items: stretch; gap: 2px; padding: 8px; background: rgba(11,17,31,.98); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 18px 50px rgba(0,0,0,.5); }
+  nav.open { display: flex; }
+  nav.open a:not(.cta) { display: block; padding: 12px 14px; font-size: 1rem; }
+  nav a.cta { margin: 6px 0 0; text-align: center; padding: 12px 14px; }
+  .demo iframe { display: none; }
+  .only-phone { display: block; }
+  .demo .row { justify-content: center; text-align: center; }
+}
