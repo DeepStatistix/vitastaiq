@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Price Forecast Lab</title>
+  <meta name="description" content="Twelve-week mandi price forecasts with honest backtests: rolling-origin errors, naive baselines and interval coverage, built on public Agmarknet history.">
+  <style>
+    :root { color-scheme: dark; --bg:#070b14; --bg2:#0d1424; --card:rgba(255,255,255,.045); --line:rgba(255,255,255,.09); --fg:#e9eef7; --muted:#8c9ab3; --a:#22d3c5; --b:#6aa8ff; --warm:#ffb454; --good:#6fe3a1; --bad:#ff7b7b; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--fg); font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; min-height:100vh;
+      background: radial-gradient(900px 500px at 85% -10%, rgba(34,211,197,.14), transparent 60%), radial-gradient(700px 420px at -10% 10%, rgba(106,168,255,.13), transparent 60%), linear-gradient(var(--bg), var(--bg2)) fixed; }
+    body::before { content:""; position:fixed; inset:0; pointer-events:none; opacity:.3; background-image:linear-gradient(var(--line) 1px, transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px); background-size:44px 44px; -webkit-mask-image:radial-gradient(ellipse at 50% 0%,#000,transparent 70%); mask-image:radial-gradient(ellipse at 50% 0%,#000,transparent 70%); }
+    .wrap { position:relative; max-width:1120px; margin:0 auto; padding:22px 16px 56px; }
+    .glass { background:var(--card); border:1px solid var(--line); border-radius:16px; backdrop-filter:blur(6px); }
+    header { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:22px; }
+    .logo { font-weight:750; } .logo b { background:linear-gradient(90deg,var(--a),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .logo a { color:var(--muted); font-weight:500; text-decoration:none; font-size:.9rem; margin-left:8px; }
+    .pill { font-size:.8rem; color:var(--muted); padding:6px 12px; border-radius:99px; display:inline-flex; gap:8px; align-items:center; }
+    .dot { width:8px; height:8px; border-radius:50%; background:var(--a); box-shadow:0 0 0 0 rgba(34,211,197,.7); animation:pulse 1.8s infinite; }
+    @keyframes pulse { 70% { box-shadow:0 0 0 10px rgba(34,211,197,0); } 100% { box-shadow:0 0 0 0 rgba(34,211,197,0); } }
+    h1 { font-size:clamp(1.8rem,5vw,2.9rem); line-height:1.1; margin:0 0 8px; letter-spacing:-.02em; }
+    h1 span { background:linear-gradient(90deg,var(--a),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .lede { color:var(--muted); max-width:66ch; margin:0 0 20px; }
+    .controls { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:16px; }
+    .chip { font:inherit; font-size:.9rem; color:var(--fg); background:transparent; border:1px solid var(--line); border-radius:99px; padding:6px 15px; cursor:pointer; }
+    .chip:hover { border-color:var(--a); }
+    .chip[aria-pressed="true"] { background:linear-gradient(90deg,var(--a),var(--b)); color:#04121a; border-color:transparent; font-weight:650; }
+    select { font:inherit; color:var(--fg); background:rgba(0,0,0,.3); border:1px solid var(--line); border-radius:10px; padding:8px 12px; }
+    select:focus { outline:2px solid var(--a); outline-offset:1px; }
+    .cards { display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); margin-bottom:16px; }
+    .k { padding:15px 17px; } .k .l { color:var(--muted); font-size:.76rem; text-transform:uppercase; letter-spacing:.08em; }
+    .k .v { font-size:1.65rem; font-weight:760; font-variant-numeric:tabular-nums; } .k .s { color:var(--muted); font-size:.82rem; }
+    .up { color:var(--warm); } .dn { color:var(--a); }
+    .panel { padding:16px 16px 10px; margin-bottom:16px; }
+    .panel h2 { font-size:1.02rem; margin:0 0 2px; } .panel .sub { color:var(--muted); font-size:.85rem; margin:0 0 8px; }
+    .chart { position:relative; width:100%; height:360px; } .chart.sm { height:260px; }
+    .tip { position:absolute; pointer-events:none; background:rgba(7,11,20,.94); border:1px solid var(--line); border-radius:10px; padding:8px 11px; font-size:.8rem; line-height:1.45; display:none; z-index:3; white-space:nowrap; }
+    .legend { display:flex; flex-wrap:wrap; gap:14px; color:var(--muted); font-size:.8rem; margin-top:6px; }
+    .legend i { display:inline-block; width:14px; height:3px; border-radius:2px; margin-right:6px; vertical-align:middle; }
+    table { width:100%; border-collapse:collapse; font-size:.9rem; font-variant-numeric:tabular-nums; }
+    th,td { text-align:right; padding:7px 8px; border-bottom:1px solid var(--line); } th:first-child,td:first-child { text-align:left; } th { color:var(--muted); font-weight:600; }
+    .good { color:var(--good); } .bad { color:var(--bad); }
+    .grid2 { display:grid; gap:16px; grid-template-columns:1.2fr 1fr; } @media (max-width:860px) { .grid2 { grid-template-columns:1fr; } }
+    .how { padding:18px; color:var(--muted); font-size:.9rem; } .how h2 { color:var(--fg); font-size:1.05rem; margin:0 0 6px; } .how b { color:var(--fg); }
+    .how ul { margin:6px 0 0; padding-left:18px; } .how li { margin:4px 0; }
+    .note { color:var(--muted); font-size:.8rem; margin-top:26px; border-top:1px solid var(--line); padding-top:14px; }
+    @media (prefers-reduced-motion:reduce) { .dot { animation:none; } }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">Vitasta<b>IQ</b> <span style="color:var(--muted);font-weight:500">/ Price Forecast Lab</span><a href="../../index.html">&larr; Home</a><a href="../mandi/index.html">Mandi Intelligence</a></div>
+    <div class="pill glass"><span class="dot"></span><span id="asof">loading</span></div>
+  </header>
+
+  <h1>Twelve-week price outlook, <span>with the receipts.</span></h1>
+  <p class="lede">Weekly state-level mandi price forecasts with uncertainty bands. Every number is paired with a rolling backtest that shows how the same method would have done on the past three years, against simple baselines.</p>
+
+  <div class="controls">
+    <div id="com" role="group" aria-label="Commodity"></div>
+    <select id="state" aria-label="State"></select>
+  </div>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="panel glass">
+    <h2 id="t1">Forecast</h2>
+    <p class="sub">Weekly median modal price, Rs per quintal. Shaded bands are 80% and 95% prediction intervals. Hover for values.</p>
+    <div class="chart" id="main"></div>
+    <div class="legend"><span><i style="background:#6aa8ff"></i>Actual</span><span><i style="background:#22d3c5"></i>Forecast</span><span><i style="background:rgba(34,211,197,.45)"></i>80% interval</span><span><i style="background:rgba(34,211,197,.18)"></i>95% interval</span></div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel glass">
+      <h2>Backtest: what the 4-week-ahead forecast looked like</h2>
+      <p class="sub">At each past origin the model saw only data up to that week. Dots are what actually happened.</p>
+      <div class="chart sm" id="bt"></div>
+    </div>
+    <div class="panel glass">
+      <h2>Scorecard</h2>
+      <p class="sub" id="scsub"></p>
+      <table id="score"></table>
+    </div>
+  </div>
+
+  <div class="how glass">
+    <h2>How to read this</h2>
+    <ul>
+      <li><b>Error is mean absolute percentage error (MAPE)</b> of the weekly price, over rolling origins every four weeks across the last three years. Lower is better.</li>
+      <li><b>The baselines matter.</b> "Naive" repeats the last price. "Seasonal naive" repeats the price from a year earlier. A model that cannot beat naive has no business being used.</li>
+      <li><b>No peeking.</b> Each backtest forecast is built only from data available at its origin. Interval bands come from past forecast errors, and their coverage is checked on origins that were not used to build them. A well-calibrated 80% band should cover about 80%.</li>
+      <li><b>Expect modest gains.</b> Mandi prices are volatile and close to a random walk at short horizons. The method adds a damped trend and a shrunken same-season price move from previous years. It helps most at longer horizons, and it is wrong often. Treat the bands, not the line, as the message.</li>
+      <li><b>One caveat on the scorecard:</b> the method was chosen from five candidates on this same history, so the shown improvement may be slightly optimistic.</li>
+    </ul>
+  </div>
+
+  <p class="note">Data: public Agmarknet daily mandi prices (Government of India open data), aggregated to weekly state medians. Prices are modal prices in Rs per quintal and mix varieties and grades. Forecasts are statistical projections for information only, not trading or financial advice. Built by VitastaIQ.</p>
+</div>
+<script src="forecast.js"></script>
+<script>
+(function () {
+  var F = window.FC; var $ = function (id) { return document.getElementById(id); };
+  var fmt = function (n) { return Math.round(n).toLocaleString("en-IN"); };
+  if (!F) { $("asof").textContent = "no data"; return; }
+  var keys = Object.keys(F), coms = [], cur = null;
+  keys.forEach(function (k) { var c = k.split("|")[0]; if (coms.indexOf(c) < 0) coms.push(c); });
+  var com = coms[0], state = null;
+  var dstr = function (s) { return new Date(s + "T00:00:00").toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }); };
+  var short = function (s) { return new Date(s + "T00:00:00").toLocaleDateString("en-IN", { month: "short", year: "2-digit" }); };
+
+  function states() { return keys.filter(function (k) { return k.split("|")[0] === com; }).map(function (k) { return k.split("|")[1]; }); }
+  function setCom() {
+    $("com").innerHTML = coms.map(function (c) { return '<button type="button" class="chip" data-c="' + c + '" aria-pressed="' + (c === com) + '">' + c + "</button>"; }).join(" ");
+    var ss = states(); if (ss.indexOf(state) < 0) state = ss.indexOf("Maharashtra") >= 0 ? "Maharashtra" : ss[0];
+    $("state").innerHTML = ss.map(function (s) { return '<option value="' + s + '"' + (s === state ? " selected" : "") + ">" + s + "</option>"; }).join("");
+  }
+
+  /* generic SVG chart with hover. series: [{x:[ms], y:[], color, width, dash, dots}], bands:[{x:[], lo:[], hi:[], color}] */
+  function plot(id, cfg) {
+    var el = $(id), W = Math.max(el.clientWidth, 300), Ht = el.clientHeight || 300, l = 58, r = 14, t = 10, b = 28, iw = W - l - r, ih = Ht - t - b;
+    var xs = [], ys = [];
+    cfg.series.forEach(function (s) { s.x.forEach(function (v) { xs.push(v); }); s.y.forEach(function (v) { ys.push(v); }); });
+    (cfg.bands || []).forEach(function (bd) { bd.lo.forEach(function (v) { ys.push(v); }); bd.hi.forEach(function (v) { ys.push(v); }); });
+    var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys), pad = (y1 - y0) * .06 || 1; y0 = Math.max(0, y0 - pad); y1 += pad;
+    var sx = function (v) { return l + (v - x0) / (x1 - x0) * iw; }, sy = function (v) { return t + ih - (v - y0) / (y1 - y0) * ih; };
+    var s = '<svg width="' + W + '" height="' + Ht + '" style="display:block">';
+    for (var k = 0; k <= 4; k++) { var v = y0 + (y1 - y0) * k / 4, y = sy(v); s += '<line x1="' + l + '" x2="' + (W - r) + '" y1="' + y + '" y2="' + y + '" stroke="rgba(255,255,255,.08)"/><text x="' + (l - 6) + '" y="' + (y + 4) + '" text-anchor="end" font-size="11" fill="#8c9ab3">' + fmt(v) + "</text>"; }
+    var nt = Math.max(2, Math.floor(iw / 90));
+    for (var q = 0; q <= nt; q++) { var xv = x0 + (x1 - x0) * q / nt; s += '<text x="' + sx(xv) + '" y="' + (Ht - 8) + '" text-anchor="middle" font-size="11" fill="#8c9ab3">' + short(new Date(xv).toISOString().slice(0, 10)) + "</text>"; }
+    (cfg.bands || []).forEach(function (bd) {
+      var up = bd.x.map(function (v, i) { return sx(v) + "," + sy(bd.hi[i]); }), dn = bd.x.map(function (v, i) { return sx(v) + "," + sy(bd.lo[i]); }).reverse();
+      s += '<polygon points="' + up.concat(dn).join(" ") + '" fill="' + bd.color + '"/>';
+    });
+    if (cfg.vline != null) s += '<line x1="' + sx(cfg.vline) + '" x2="' + sx(cfg.vline) + '" y1="' + t + '" y2="' + (t + ih) + '" stroke="rgba(255,255,255,.28)" stroke-dasharray="3 4"/><text x="' + (sx(cfg.vline) + 6) + '" y="' + (t + 12) + '" font-size="10.5" fill="#8c9ab3">forecast &rarr;</text>';
+    cfg.series.forEach(function (sr) {
+      s += '<polyline fill="none" stroke="' + sr.color + '" stroke-width="' + (sr.width || 2) + '"' + (sr.dash ? ' stroke-dasharray="' + sr.dash + '"' : "") + ' stroke-linejoin="round" points="' + sr.x.map(function (v, i) { return sx(v) + "," + sy(sr.y[i]); }).join(" ") + '"/>';
+      if (sr.dots) sr.x.forEach(function (v, i) { s += '<circle cx="' + sx(v) + '" cy="' + sy(sr.y[i]) + '" r="3" fill="' + sr.color + '"/>'; });
+    });
+    s += '<line id="hv_' + id + '" y1="' + t + '" y2="' + (t + ih) + '" stroke="rgba(255,255,255,.4)" style="display:none"/></svg><div class="tip" id="tip_' + id + '"></div>';
+    el.innerHTML = s;
+    var tip = $("tip_" + id), hv = $("hv_" + id);
+    el.onmousemove = function (e) {
+      var bx = el.getBoundingClientRect(), mx = e.clientX - bx.left; if (mx < l || mx > W - r) { tip.style.display = "none"; hv.style.display = "none"; return; }
+      var xv = x0 + (mx - l) / iw * (x1 - x0), ref = cfg.series[0], bi = 0, bd = 1e18;
+      ref.x.forEach(function (v, i) { var dd = Math.abs(v - xv); if (dd < bd) { bd = dd; bi = i; } });
+      var allx = [], best = null; cfg.series.forEach(function (sr) { sr.x.forEach(function (v) { if (best === null || Math.abs(v - xv) < Math.abs(best - xv)) best = v; }); });
+      var rows = cfg.tip(best); if (!rows) { tip.style.display = "none"; return; }
+      tip.innerHTML = rows; tip.style.display = "block"; hv.style.display = "block"; hv.setAttribute("x1", sx(best)); hv.setAttribute("x2", sx(best));
+      tip.style.left = Math.min(Math.max(sx(best) + 12, 6), W - 190) + "px"; tip.style.top = "12px";
+    };
+    el.onmouseleave = function () { tip.style.display = "none"; hv.style.display = "none"; };
+  }
+
+  function render() {
+    var d = F[com + "|" + state], ms = function (s) { return new Date(s + "T00:00:00").getTime(); };
+    var lastP = d.hist[d.hist.length - 1][1], f4 = d.fc[3], f12 = d.fc[11], sc = d.score;
+    $("asof").textContent = "Latest week ends " + dstr(d.last);
+    var chg = function (p) { var c = (p / lastP - 1) * 100; return '<span class="' + (c >= 0 ? "up" : "dn") + '">' + (c >= 0 ? "+" : "") + c.toFixed(1) + "%</span> vs last"; };
+    var impr = function (h) { var m = sc.model[h - 1], n = sc.naive[h - 1]; return (1 - m / n) * 100; };
+    $("cards").innerHTML =
+      '<div class="k glass"><div class="l">Last weekly price</div><div class="v">Rs ' + fmt(lastP) + '</div><div class="s">week to ' + dstr(d.last) + "</div></div>" +
+      '<div class="k glass"><div class="l">4 weeks ahead</div><div class="v">Rs ' + fmt(f4.p) + '</div><div class="s">80% range ' + fmt(f4.l80) + " to " + fmt(f4.h80) + " &middot; " + chg(f4.p) + "</div></div>" +
+      '<div class="k glass"><div class="l">12 weeks ahead</div><div class="v">Rs ' + fmt(f12.p) + '</div><div class="s">80% range ' + fmt(f12.l80) + " to " + fmt(f12.h80) + " &middot; " + chg(f12.p) + "</div></div>" +
+      '<div class="k glass"><div class="l">Backtest skill at 12 weeks</div><div class="v ' + (impr(12) >= 0 ? "good" : "bad") + '">' + (impr(12) >= 0 ? "+" : "") + impr(12).toFixed(0) + '%</div><div class="s">error vs naive baseline (' + sc.model[11] + "% vs " + sc.naive[11] + "%)</div></div>";
+    $("t1").textContent = com + " in " + state + ": history and 12-week forecast";
+
+    var hx = d.hist.map(function (r) { return ms(r[0]); }).slice(-104), hy = d.hist.map(function (r) { return r[1]; }).slice(-104);
+    var fx = [hx[hx.length - 1]].concat(d.fc.map(function (r) { return ms(r.d); })), fy = [hy[hy.length - 1]].concat(d.fc.map(function (r) { return r.p; }));
+    var bx = fx.slice(1);
+    plot("main", {
+      series: [{ x: hx, y: hy, color: "#6aa8ff", width: 2 }, { x: fx, y: fy, color: "#22d3c5", width: 2.4, dash: "6 4" }],
+      bands: [{ x: bx, lo: d.fc.map(function (r) { return r.l95; }), hi: d.fc.map(function (r) { return r.h95; }), color: "rgba(34,211,197,.14)" },
+              { x: bx, lo: d.fc.map(function (r) { return r.l80; }), hi: d.fc.map(function (r) { return r.h80; }), color: "rgba(34,211,197,.28)" }],
+      vline: hx[hx.length - 1],
+      tip: function (x) {
+        var i = hx.indexOf(x); if (i >= 0) return "<b>" + dstr(new Date(x).toISOString().slice(0, 10)) + "</b><br>Actual: Rs " + fmt(hy[i]);
+        var j = d.fc.map(function (r) { return ms(r.d); }).indexOf(x); if (j < 0) return null; var r = d.fc[j];
+        return "<b>" + dstr(r.d) + "</b> (+" + (j + 1) + " wk)<br>Forecast: Rs " + fmt(r.p) + "<br>80%: " + fmt(r.l80) + " to " + fmt(r.h80) + "<br>95%: " + fmt(r.l95) + " to " + fmt(r.h95);
+      }
+    });
+
+    var bt = d.bt4, bxx = bt.map(function (r) { return ms(r.d); });
+    plot("bt", {
+      series: [{ x: bxx, y: bt.map(function (r) { return r.a; }), color: "#6aa8ff", width: 2 }, { x: bxx, y: bt.map(function (r) { return r.f; }), color: "#ffb454", width: 1.6, dash: "4 3", dots: true }],
+      tip: function (x) { var i = bxx.indexOf(x); if (i < 0) return null; return "<b>" + dstr(bt[i].d) + "</b><br>Actual: Rs " + fmt(bt[i].a) + "<br>Forecast made 4 wk earlier: Rs " + fmt(bt[i].f); }
+    });
+
+    $("scsub").textContent = sc.origins + " rolling origins over three years. Mean absolute % error; 80% interval coverage on held-out origins: " + sc.cov80 + "% (target 80%).";
+    var hs = [1, 2, 4, 8, 12];
+    $("score").innerHTML = "<thead><tr><th>Weeks ahead</th><th>Model</th><th>Naive</th><th>Seasonal naive</th><th>vs naive</th></tr></thead><tbody>" +
+      hs.map(function (h) { var i = impr(h); return "<tr><td>" + h + "</td><td>" + sc.model[h - 1] + "%</td><td>" + sc.naive[h - 1] + "%</td><td>" + sc.snaive[h - 1] + '%</td><td class="' + (i >= 0 ? "good" : "bad") + '">' + (i >= 0 ? "+" : "") + i.toFixed(0) + "%</td></tr>"; }).join("") + "</tbody>";
+  }
+
+  $("com").addEventListener("click", function (e) { var b = e.target.closest && e.target.closest("button"); if (!b) return; com = b.getAttribute("data-c"); setCom(); render(); });
+  $("state").addEventListener("change", function () { state = $("state").value; render(); });
+  window.addEventListener("resize", render);
+  setCom(); render();
+})();
+</script>
+</body>
+</html>
