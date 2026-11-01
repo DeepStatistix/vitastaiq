@@ -24,7 +24,9 @@ $logDir = Join-Path $env:LOCALAPPDATA "VitastaIQ"
 New-Item -ItemType Directory -Force -Path $logDir | Out-Null
 $log = Join-Path $logDir "refresh.log"
 function Log([string]$m) { $l = "{0:yyyy-MM-dd HH:mm:ss}  {1}" -f (Get-Date), $m; Add-Content -Path $log -Value $l; Write-Host $l }
-function Git { & git @args; if ($LASTEXITCODE -ne 0) { throw "git $($args -join ' ') failed (exit $LASTEXITCODE)" } }
+# Named GitRun, and calls git.exe explicitly: PowerShell command names are case-insensitive, so a function
+# called Git that runs "git" would call itself forever.
+function GitRun { & git.exe @args; if ($LASTEXITCODE -ne 0) { throw "git $($args -join ' ') failed (exit $LASTEXITCODE)" } }
 
 try {
   Log "start (DryRun=$DryRun)"
@@ -33,9 +35,9 @@ try {
   $fetcher = Join-Path $RepoDir "site/demo/mandi/fetch_live.py"
 
   if (-not $DryRun) {
-    Git fetch origin main
-    Git checkout main
-    Git pull --ff-only origin main
+    GitRun fetch origin main
+    GitRun checkout main
+    GitRun pull --ff-only origin main
   }
 
   $out = if ($DryRun) { Join-Path $env:TEMP "vitastaiq_live_dryrun.js" } else { Join-Path $RepoDir $target }
@@ -51,9 +53,9 @@ try {
 
   if ($DryRun) { Log "dry run: nothing committed or pushed"; Remove-Item $out -Force; exit 0 }
 
-  Git add -- $target
-  Git commit -m ("Refresh live mandi data ({0})" -f $m.Groups[1].Value) -- $target
-  Git push origin main
+  GitRun add -- $target
+  GitRun commit -m ("Refresh live mandi data ({0})" -f $m.Groups[1].Value) -- $target
+  GitRun push origin main
   Log "published; GitHub will redeploy the site in about a minute"
 }
 catch {
