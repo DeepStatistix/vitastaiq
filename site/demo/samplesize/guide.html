@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How to use the Sample Size Calculator</title>
+  <meta name="description" content="A plain-language guide to the sample size calculator: which design to pick, what every box means, where to get your numbers, worked examples and common mistakes.">
+  <style>
+    :root { color-scheme: dark; --bg:#070b14; --bg2:#0d1424; --card:rgba(255,255,255,.045); --line:rgba(255,255,255,.09); --fg:#e9eef7; --muted:#8c9ab3; --a:#22d3c5; --b:#6aa8ff; --warm:#ffb454; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; scroll-padding-top:16px; }
+    body { margin:0; color:var(--fg); font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif; min-height:100vh;
+      background: radial-gradient(900px 500px at 85% -10%, rgba(34,211,197,.14), transparent 60%), radial-gradient(700px 420px at -10% 10%, rgba(106,168,255,.13), transparent 60%), linear-gradient(var(--bg), var(--bg2)) fixed; }
+    a { color:var(--a); }
+    .wrap { max-width:860px; margin:0 auto; padding:22px 16px 60px; }
+    .glass { background:var(--card); border:1px solid var(--line); border-radius:16px; }
+    header { display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:24px; }
+    .logo { font-weight:750; } .logo b { background:linear-gradient(90deg,var(--a),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .logo a { color:var(--muted); font-weight:500; text-decoration:none; font-size:.9rem; margin-left:10px; }
+    h1 { font-size:clamp(1.8rem,5vw,2.7rem); line-height:1.12; margin:0 0 10px; letter-spacing:-.02em; }
+    h1 span { background:linear-gradient(90deg,var(--a),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    h2 { font-size:1.45rem; margin:44px 0 6px; letter-spacing:-.01em; } h3 { font-size:1.08rem; margin:22px 0 4px; }
+    .lede { color:var(--muted); font-size:1.05rem; margin:0 0 18px; }
+    p { margin:8px 0; } .muted { color:var(--muted); }
+    .steps { display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); margin:14px 0; counter-reset:s; }
+    .step { padding:16px 18px; counter-increment:s; } .step::before { content:counter(s); font-weight:800; font-size:1.6rem; background:linear-gradient(90deg,var(--a),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .step b { display:block; } .step span { color:var(--muted); font-size:.92rem; }
+    .toc { padding:14px 18px; margin:16px 0; columns:2; column-gap:24px; font-size:.95rem; } @media (max-width:600px) { .toc { columns:1; } }
+    .toc a { display:block; padding:2px 0; text-decoration:none; }
+    table { width:100%; border-collapse:collapse; font-size:.92rem; margin:10px 0; }
+    th,td { text-align:left; padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top; } th { color:var(--muted); font-weight:600; font-size:.8rem; text-transform:uppercase; letter-spacing:.06em; }
+    .tw { overflow-x:auto; } td b { color:var(--fg); }
+    .call { padding:14px 18px; border-left:3px solid var(--a); border-radius:8px; background:rgba(0,0,0,.22); margin:14px 0; font-size:.95rem; }
+    .call.warn { border-left-color:var(--warm); }
+    .ex { padding:18px 20px; margin:14px 0; } .ex h3 { margin-top:0; }
+    .res { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; } .res div { padding:8px 14px; border:1px solid var(--line); border-radius:12px; } .res b { font-size:1.2rem; display:block; } .res span { color:var(--muted); font-size:.75rem; text-transform:uppercase; letter-spacing:.06em; }
+    .btn { display:inline-block; padding:9px 16px; border-radius:10px; text-decoration:none; font-weight:650; color:#04121a; background:linear-gradient(90deg,var(--a),var(--b)); margin-top:6px; }
+    ul { padding-left:20px; } li { margin:4px 0; }
+    code { background:rgba(255,255,255,.08); padding:1px 6px; border-radius:6px; font-size:.9em; }
+    .note { color:var(--muted); font-size:.82rem; margin-top:40px; border-top:1px solid var(--line); padding-top:14px; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header><div class="logo">Vitasta<b>IQ</b> <span style="color:var(--muted);font-weight:500">/ Guide</span><a href="index.html">&larr; Open the calculator</a><a href="../../index.html">Home</a></div></header>
+
+  <h1>How to use the <span>Sample Size Calculator</span></h1>
+  <p class="lede">Written for thesis students and first-time researchers. No statistics background needed. By the end you will know which tab to pick, what every box means, where to find your numbers, and how to put the result in your protocol.</p>
+
+  <div class="steps">
+    <div class="step glass"><b>Pick your design</b><span>Match your research question to one of five tabs.</span></div>
+    <div class="step glass"><b>Fill in your assumptions</b><span>What you expect to find, taken from a pilot study or published papers.</span></div>
+    <div class="step glass"><b>Read and copy</b><span>Take the total with dropout, plus the methods sentence for your protocol.</span></div>
+  </div>
+
+  <div class="toc glass"><a href="#choose">1. Which design do I need?</a><a href="#common">2. The four boxes on every tab</a><a href="#specific">3. The boxes for each design</a><a href="#sources">4. Where do my numbers come from?</a><a href="#examples">5. Worked examples you can open</a><a href="#react">6. How the answer reacts to your choices</a><a href="#mistakes">7. Common mistakes</a><a href="#thesis">8. Putting it in your thesis</a><a href="#glossary">9. Glossary</a></div>
+
+  <h2 id="choose">1. Which design do I need?</h2>
+  <p>Ask yourself two questions. <b>(a)</b> Is my main outcome a <i>number</i> (blood pressure, a score) or a <i>yes/no</i> (cured, anaemic)? <b>(b)</b> Am I comparing <i>two separate groups</i>, measuring the <i>same people twice</i>, or describing <i>one group</i>?</p>
+  <div class="tw"><table>
+    <tr><th>Your question</th><th>Outcome</th><th>Groups</th><th>Tab to choose</th></tr>
+    <tr><td>Does drug A lower blood pressure more than drug B?</td><td>Number</td><td>Two separate groups</td><td><b>Compare two means</b></td></tr>
+    <tr><td>Is the cure rate higher with treatment A than B?</td><td>Yes / no</td><td>Two separate groups</td><td><b>Compare two proportions</b></td></tr>
+    <tr><td>What percentage of students in my college are anaemic?</td><td>Yes / no</td><td>One group (a survey)</td><td><b>Estimate a prevalence</b></td></tr>
+    <tr><td>Did body weight change after the diet programme?</td><td>Number</td><td>Same people, before and after</td><td><b>Paired means</b></td></tr>
+    <tr><td>Is BMI related to cholesterol?</td><td>Two numbers</td><td>One group</td><td><b>Correlation</b></td></tr>
+  </table></div>
+  <div class="call warn"><b>Not covered here:</b> survival or time-to-event outcomes, three or more groups, repeated measurements over time, non-inferiority or equivalence trials, cluster or multi-centre designs, and diagnostic-accuracy studies. These need different formulas. Please ask a statistician before you finalise.</div>
+
+  <h2 id="common">2. The four boxes on every tab</h2>
+  <p class="muted">The same four settings appear below your design-specific inputs. The last column shows how each setting changes the sample size in a typical example (two means, SD 12, difference 6), where the baseline is <b>64 per group</b>.</p>
+  <div class="tw"><table>
+    <tr><th>Box</th><th>What it means</th><th>What to pick</th><th>Effect on sample size</th></tr>
+    <tr><td><b>Significance level (alpha)</b></td><td>The chance of a false alarm: concluding there is an effect when there is none.</td><td><b>0.05</b> almost always. Use 0.01 only if your supervisor or the field requires stricter evidence.</td><td>0.01 needs more (64 &rarr; 96).</td></tr>
+    <tr><td><b>Power</b></td><td>The chance your study will detect a real effect of the size you entered. Low power means a real effect can be missed.</td><td><b>80%</b> is the usual minimum. Choose 90% for important or hard-to-repeat studies.</td><td>90% needs more (64 &rarr; 86).</td></tr>
+    <tr><td><b>Test: two-sided or one-sided</b></td><td>Two-sided allows the effect to go either way. One-sided assumes it can only go one way.</td><td><b>Two-sided</b> unless you can justify, before the study, that the opposite direction is impossible or irrelevant. Do not pick one-sided just to get a smaller sample.</td><td>One-sided needs fewer (64 &rarr; 51), which is why reviewers are suspicious of it.</td></tr>
+    <tr><td><b>Expected dropout (%)</b></td><td>People who leave the study, are lost to follow-up, or do not respond.</td><td>Guess from similar studies. <b>10 to 20%</b> is common; use more for long follow-up or sensitive surveys.</td><td>The calculator enlarges the sample so you still finish with enough people.</td></tr>
+  </table></div>
+  <div class="call">The <b>Power</b> and <b>Test</b> boxes disappear on the prevalence tab, because that design estimates a value with a margin of error and does not test a hypothesis.</div>
+
+  <h2 id="specific">3. The boxes for each design</h2>
+
+  <h3>Compare two means</h3>
+  <div class="tw"><table>
+    <tr><th>Box</th><th>What it means</th><th>Example</th></tr>
+    <tr><td><b>Standard deviation of the outcome</b></td><td>How much the measurement varies from person to person. A bigger spread needs a bigger sample.</td><td>Systolic BP in similar patients has an SD of about 12 mmHg.</td></tr>
+    <tr><td><b>Smallest difference worth detecting</b></td><td>The smallest gap between the groups that would matter to a doctor or patient. It is <i>not</i> the difference you hope to see.</td><td>A 6 mmHg fall is clinically meaningful.</td></tr>
+    <tr><td><b>Allocation ratio</b></td><td>Participants in group 2 for every one in group 1. Leave at <b>1</b> for equal groups.</td><td>2 means two controls for each case.</td></tr>
+  </table></div>
+
+  <h3>Compare two proportions</h3>
+  <div class="tw"><table>
+    <tr><th>Box</th><th>What it means</th><th>Example</th></tr>
+    <tr><td><b>Expected proportion, group 1 and group 2</b></td><td>The share of people with the outcome in each group, written as a <b>decimal between 0 and 1</b>. 70% is 0.70, not 70. They must differ, and their gap is the effect you want to detect.</td><td>Cure rate 0.70 with the new treatment versus 0.50 with the standard one.</td></tr>
+    <tr><td><b>Allocation ratio</b></td><td>As above.</td><td>Keep at 1 unless you plan unequal groups.</td></tr>
+  </table></div>
+
+  <h3>Estimate a prevalence</h3>
+  <div class="tw"><table>
+    <tr><th>Box</th><th>What it means</th><th>Example</th></tr>
+    <tr><td><b>Expected prevalence</b></td><td>Your best guess of the true proportion, as a decimal, from earlier studies. If you truly have no idea, use <b>0.5</b>: it gives the largest, safest sample.</td><td>Earlier surveys found about 30% anaemia, so 0.30.</td></tr>
+    <tr><td><b>Absolute precision</b></td><td>How far your estimate may stray from the truth, in percentage points, as a decimal. Smaller means a bigger sample.</td><td>0.05 means plus or minus 5 percentage points (25% to 35%).</td></tr>
+    <tr><td><b>Population size</b></td><td>The total number of people you are sampling from, <i>only if it is small and known</i>. It reduces the sample. Leave blank for large or unknown populations.</td><td>800 students in the college.</td></tr>
+  </table></div>
+
+  <h3>Paired means (before / after)</h3>
+  <div class="tw"><table>
+    <tr><th>Box</th><th>What it means</th><th>Example</th></tr>
+    <tr><td><b>SD of the within-person differences</b></td><td>Work out each person's change (after minus before), then take the SD of those changes. It is <i>not</i> the SD of the raw measurements.</td><td>Weight changes vary with an SD of 4 kg.</td></tr>
+    <tr><td><b>Smallest mean change worth detecting</b></td><td>The smallest average change that would matter in practice.</td><td>A 2 kg average loss.</td></tr>
+  </table></div>
+
+  <h3>Correlation</h3>
+  <div class="tw"><table>
+    <tr><th>Box</th><th>What it means</th><th>Example</th></tr>
+    <tr><td><b>Smallest correlation worth detecting (r)</b></td><td>The weakest relationship that would still be meaningful. Roughly: 0.1 is weak, 0.3 moderate, 0.5 strong. The sign does not matter here.</td><td>r = 0.30 between BMI and cholesterol.</td></tr>
+  </table></div>
+
+  <h2 id="sources">4. Where do my numbers come from?</h2>
+  <p>The calculator does the arithmetic. The <b>assumptions are yours</b>, and your protocol should say where they came from.</p>
+  <ul>
+    <li><b>A pilot study</b> of 20 to 30 participants gives a rough SD or proportion. Do not use the pilot's <i>effect</i> directly, because small pilots overestimate it.</li>
+    <li><b>Published papers</b> on the same outcome in a similar population. Search for the same measure and take the SD or proportion reported. If a paper gives a standard error (SE), the SD is SE &times; &radic;n. If it gives a 95% confidence interval for a mean, SD &asymp; &radic;n &times; (upper &minus; lower) / 3.92.</li>
+    <li><b>The smallest clinically important difference</b> comes from clinical judgement or published guidelines, not from a statistics rule. Ask your supervisor: "What is the smallest change that would change practice?"</li>
+    <li><b>No information at all?</b> For a prevalence use 0.5. For two means, Cohen's rule of thumb (a difference of 0.2, 0.5 or 0.8 SDs for small, medium or large) is a last resort and a weak justification. Say so honestly.</li>
+  </ul>
+
+  <h2 id="examples">5. Worked examples you can open</h2>
+  <p class="muted">Each button opens the calculator with the example already filled in. Change anything to see the result move.</p>
+
+  <div class="ex glass"><h3>Example 1. Two means: a new drug versus placebo for blood pressure</h3>
+    <p>Earlier studies show an SD of 12 mmHg. A fall of 6 mmHg would matter clinically. Standard settings, expecting 10% dropout.</p>
+    <div class="res"><div><b>64</b><span>per group</span></div><div><b>72</b><span>per group with dropout</span></div><div><b>144</b><span>total to recruit</span></div></div>
+    <a class="btn" href="index.html?design=twoMeans&sd=12&delta=6&ratio=1&alpha=0.05&power=0.8&sides=2&drop=10">Open this example</a></div>
+
+  <div class="ex glass"><h3>Example 2. Two proportions: cure rate 70% versus 50%</h3>
+    <p>You expect 70% to be cured with the new treatment and 50% with the standard one.</p>
+    <div class="res"><div><b>93</b><span>per group</span></div><div><b>104</b><span>per group with dropout</span></div><div><b>208</b><span>total to recruit</span></div></div>
+    <a class="btn" href="index.html?design=twoProps&p1=0.7&p2=0.5&ratio=1&alpha=0.05&power=0.8&sides=2&drop=10">Open this example</a></div>
+
+  <div class="ex glass"><h3>Example 3. Prevalence: anaemia in a college</h3>
+    <p>Earlier surveys suggest about 30%. You want a margin of error of plus or minus 5 points, and expect 10% non-response.</p>
+    <div class="res"><div><b>323</b><span>needed</span></div><div><b>359</b><span>to approach, with non-response</span></div></div>
+    <p class="muted">If the college has only 800 students, enter 800 in "Population size": the need falls to 231 before non-response.</p>
+    <a class="btn" href="index.html?design=oneProp&p=0.3&d=0.05&alpha=0.05&drop=10">Open this example</a></div>
+
+  <div class="ex glass"><h3>Example 4. Paired: weight before and after a diet programme</h3>
+    <p>The within-person changes have an SD of 4 kg. An average loss of 2 kg would be worthwhile.</p>
+    <div class="res"><div><b>34</b><span>people needed</span></div><div><b>38</b><span>with dropout</span></div></div>
+    <a class="btn" href="index.html?design=paired&sdDiff=4&delta=2&alpha=0.05&power=0.8&sides=2&drop=10">Open this example</a></div>
+
+  <div class="ex glass"><h3>Example 5. Correlation: BMI and cholesterol</h3>
+    <p>You want to detect a correlation of at least 0.30.</p>
+    <div class="res"><div><b>85</b><span>people needed</span></div><div><b>95</b><span>with dropout</span></div></div>
+    <a class="btn" href="index.html?design=corr&r=0.3&alpha=0.05&power=0.8&sides=2&drop=10">Open this example</a></div>
+
+  <h2 id="react">6. How the answer reacts to your choices</h2>
+  <p>Using Example 1 (SD 12, difference 6) as the baseline of <b>64 per group</b>:</p>
+  <div class="tw"><table>
+    <tr><th>Change</th><th>Sample size</th><th>Lesson</th></tr>
+    <tr><td>Power 80% &rarr; 90%</td><td>86 per group</td><td>Extra certainty costs participants.</td></tr>
+    <tr><td>Alpha 0.05 &rarr; 0.01</td><td>96 per group</td><td>A stricter false-alarm limit needs more people.</td></tr>
+    <tr><td>Two-sided &rarr; one-sided</td><td>51 per group</td><td>Cheaper, but only if you can defend it.</td></tr>
+    <tr><td>Difference 6 &rarr; 4</td><td>143 per group</td><td>Detecting a smaller effect is far more expensive. Sample size grows with the <i>square</i> of how small the effect is.</td></tr>
+    <tr><td>Two controls per case (ratio 2)</td><td>49 + 97 = 146 total</td><td>Unequal groups cost a little more in total but can ease recruitment.</td></tr>
+  </table></div>
+
+  <h2 id="mistakes">7. Common mistakes</h2>
+  <ul>
+    <li><b>Choosing the effect size to get a small sample.</b> Enter the smallest difference that matters clinically, not the one that makes the number comfortable.</li>
+    <li><b>Typing percentages as whole numbers.</b> Proportions are decimals: 0.70, not 70. The calculator will warn you.</li>
+    <li><b>Using the SE instead of the SD.</b> The SE is much smaller and will make your sample far too small.</li>
+    <li><b>Forgetting dropout.</b> Always allow for it, then recruit the "with dropout" total.</li>
+    <li><b>Mixing up precision.</b> "Plus or minus 5%" in a prevalence study means 5 percentage points (0.05), not 5% of the estimate.</li>
+    <li><b>Only sizing for one outcome.</b> Calculate for your <i>primary</i> outcome. If you plan many subgroup or secondary tests, discuss this with your statistician.</li>
+    <li><b>Treating the result as exact.</b> It is only as reliable as your assumptions. Test a few plausible values to see how sensitive it is.</li>
+  </ul>
+
+  <h2 id="thesis">8. Putting it in your thesis or protocol</h2>
+  <ul>
+    <li>Use the <b>methods sentence</b> the calculator writes, and edit it to match your study.</li>
+    <li>State <b>where each assumption came from</b>, with the paper or pilot study cited.</li>
+    <li>Name the method: normal-approximation formulas (Chow, Shao and Wang; Fleiss; Lwanga and Lemeshow). Mention the calculator if you used it, and keep a screenshot of your inputs.</li>
+    <li>Report both the <b>calculated</b> size and the <b>recruited</b> size with dropout.</li>
+  </ul>
+
+  <h2 id="glossary">9. Glossary</h2>
+  <div class="tw"><table>
+    <tr><td><b>Alpha</b></td><td>The false-alarm rate you accept. Usually 0.05.</td></tr>
+    <tr><td><b>Power</b></td><td>The chance of detecting a real effect. Usually at least 80%.</td></tr>
+    <tr><td><b>Standard deviation (SD)</b></td><td>A measure of how spread out the measurements are.</td></tr>
+    <tr><td><b>Effect size / difference worth detecting</b></td><td>How big a difference or relationship you want to be able to find.</td></tr>
+    <tr><td><b>Precision (margin of error)</b></td><td>How close an estimate should be to the truth in a survey.</td></tr>
+    <tr><td><b>Allocation ratio</b></td><td>The relative size of group 2 compared with group 1.</td></tr>
+    <tr><td><b>Dropout</b></td><td>Participants who leave or do not respond.</td></tr>
+  </table></div>
+
+  <p class="note">This guide and the calculator are planning aids, not a substitute for advice on your specific study. If your design is not listed, or you want a second opinion before submitting your protocol, <a href="../../index.html#contact">contact VitastaIQ</a>. We support the analysis and explain it, and you stay the author of your thesis.</p>
+</div>
+</body>
+</html>

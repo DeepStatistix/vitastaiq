@@ -26,7 +26,7 @@
     .layout { display:grid; gap:16px; grid-template-columns:1fr 1.1fr; align-items:start; } @media (max-width:860px) { .layout { grid-template-columns:1fr; } }
     .panel { padding:18px; margin-bottom:16px; }
     .panel h2 { font-size:1.02rem; margin:0 0 4px; } .sub { color:var(--muted); font-size:.85rem; margin:0 0 12px; }
-    .f { display:grid; gap:4px; margin-bottom:11px; } label { font-size:.84rem; color:var(--muted); display:flex; justify-content:space-between; gap:8px; }
+    .f { display:grid; gap:4px; margin-bottom:11px; } label { font-size:.84rem; color:var(--muted); display:flex; align-items:center; gap:7px; }
     label small { color:var(--muted); opacity:.8; }
     input, select { font:inherit; color:var(--fg); background:rgba(0,0,0,.3); border:1px solid var(--line); border-radius:10px; padding:9px 11px; width:100%; }
     input:focus, select:focus { outline:2px solid var(--a); outline-offset:1px; }
@@ -38,6 +38,13 @@
     .sent { padding:14px 16px; border-left:3px solid var(--a); border-radius:8px; background:rgba(0,0,0,.25); color:#cfd9ea; font-size:.9rem; }
     .btn { font:inherit; font-weight:650; color:#04121a; background:linear-gradient(90deg,var(--a),var(--b)); border:0; border-radius:10px; padding:9px 16px; cursor:pointer; margin-top:10px; }
     .chart { width:100%; height:240px; position:relative; }
+    .q { width:19px; height:19px; padding:0; border-radius:50%; border:1px solid rgba(34,211,197,.6); background:rgba(34,211,197,.12); color:var(--a); font:700 .72rem/1 system-ui,sans-serif; cursor:help; flex:none; }
+    .q:hover, .q:focus-visible, .q[aria-expanded="true"] { background:var(--a); color:#04121a; outline:none; }
+    #tipbox { position:fixed; z-index:50; width:min(330px, calc(100vw - 16px)); background:#0f1829; border:1px solid rgba(34,211,197,.45); border-radius:12px; padding:12px 14px; font-size:.84rem; line-height:1.5; color:#d7e0ee; box-shadow:0 14px 40px rgba(0,0,0,.55); }
+    #tipbox[hidden] { display:none; }
+    #tipbox b { color:var(--a); display:block; font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; margin-top:8px; } #tipbox b:first-child { margin-top:0; }
+    #tipbox a { color:var(--a); font-weight:600; }
+    .help { margin:-8px 0 18px; color:var(--muted); font-size:.9rem; } .help a { color:var(--a); font-weight:600; }
     .err { color:var(--warm); font-size:.85rem; min-height:1.2em; }
     .note { color:var(--muted); font-size:.8rem; margin-top:22px; border-top:1px solid var(--line); padding-top:14px; }
     ul.m { color:var(--muted); font-size:.88rem; padding-left:18px; margin:6px 0 0; } ul.m li { margin:4px 0; }
@@ -45,22 +52,23 @@
 </head>
 <body>
 <div class="wrap">
-  <header><div class="logo">Vitasta<b>IQ</b> <span style="color:var(--muted);font-weight:500">/ Sample Size Calculator</span><a href="../../index.html">&larr; Home</a><a href="../forecast/index.html">Forecast Lab</a></div></header>
+  <header><div class="logo">Vitasta<b>IQ</b> <span style="color:var(--muted);font-weight:500">/ Sample Size Calculator</span><a href="../../index.html">&larr; Home</a><a href="guide.html">How to use</a><a href="../forecast/index.html">Forecast Lab</a></div></header>
   <h1>How many participants <span>do you need?</span></h1>
   <p class="lede">A planning tool for thesis and clinical research. Choose your design, enter what you expect to find, and get the sample size, a power curve, and a methods sentence you can adapt for your protocol.</p>
 
+  <p class="help">New to this? Read the <a href="guide.html">step-by-step guide</a>, or not sure which design you need? Use the <a href="guide.html#choose">design chooser</a>. Hover over (or tap) the <span style="color:var(--a);font-weight:700">?</span> beside any box to see what it means and how to choose it.</p>
   <div class="tabs" id="tabs" role="group" aria-label="Study design"></div>
 
   <div class="layout">
     <div>
       <div class="panel glass"><h2 id="dtitle"></h2><p class="sub" id="ddesc"></p><div id="fields"></div>
         <div class="row2">
-          <div class="f"><label for="alpha">Significance level (alpha)</label><select id="alpha"><option value="0.05" selected>0.05</option><option value="0.01">0.01</option><option value="0.10">0.10</option></select></div>
-          <div class="f" id="powerBox"><label for="power">Power</label><select id="power"><option value="0.8" selected>80%</option><option value="0.85">85%</option><option value="0.9">90%</option><option value="0.95">95%</option></select></div>
+          <div class="f"><label for="alpha">Significance level (alpha) <button class="q" type="button" data-t="alpha" aria-label="What is the significance level?" aria-expanded="false">?</button></label><select id="alpha"><option value="0.05" selected>0.05</option><option value="0.01">0.01</option><option value="0.10">0.10</option></select></div>
+          <div class="f" id="powerBox"><label for="power">Power <button class="q" type="button" data-t="power" aria-label="What is power?" aria-expanded="false">?</button></label><select id="power"><option value="0.8" selected>80%</option><option value="0.85">85%</option><option value="0.9">90%</option><option value="0.95">95%</option></select></div>
         </div>
         <div class="row2">
-          <div class="f" id="sidesBox"><label for="sides">Test</label><select id="sides"><option value="2" selected>Two-sided</option><option value="1">One-sided</option></select></div>
-          <div class="f"><label for="drop">Expected dropout / non-response (%)</label><input id="drop" type="number" min="0" max="60" step="1" value="10"></div>
+          <div class="f" id="sidesBox"><label for="sides">Test <button class="q" type="button" data-t="sides" aria-label="Two-sided or one-sided?" aria-expanded="false">?</button></label><select id="sides"><option value="2" selected>Two-sided</option><option value="1">One-sided</option></select></div>
+          <div class="f"><label for="drop">Expected dropout (%) <button class="q" type="button" data-t="drop" aria-label="What is dropout?" aria-expanded="false">?</button></label><input id="drop" type="number" min="0" max="60" step="1" value="10"></div>
         </div>
         <div class="err" id="err" role="alert"></div>
       </div>
@@ -86,6 +94,7 @@
   </div>
   <p class="note">A planning aid from VitastaIQ, not a substitute for statistical advice on your specific study. <a href="../../index.html#contact" style="color:var(--a)">Need help with your thesis statistics?</a></p>
 </div>
+<div id="tipbox" role="tooltip" hidden></div>
 <script src="calc.js"></script>
 <script>
 (function () {
@@ -105,11 +114,36 @@
       fields: [["r", "Smallest correlation worth detecting (r)", 0.3, 0.01, "any"]], sides: true, power: true }
   };
   var keys = Object.keys(specs), cur = keys[0];
+  /* help cards: [what it is, how to choose it, where the number comes from, guide anchor] */
+  var TIPS = {
+    alpha: ["The chance you will wrongly conclude there is an effect when there really is none (a false alarm).", "Use 0.05 unless your supervisor or field requires stricter evidence (0.01). A smaller alpha needs more participants.", "It is a convention you choose in advance. You do not measure it.", "common"],
+    power: ["The chance your study will detect a real effect of the size you entered.", "Use 80% as the minimum, or 90% for important or hard-to-repeat studies. Higher power needs more participants.", "Chosen in advance, by convention and by how costly a missed effect would be.", "common"],
+    sides: ["Two-sided allows the difference to go either way. One-sided allows only one direction.", "Pick two-sided unless you can justify before the study that the opposite direction is impossible or irrelevant. One-sided gives a smaller sample, which is why reviewers question it.", "Decided from your hypothesis and written in your protocol.", "common"],
+    drop: ["The share of participants who will leave, be lost to follow-up or not respond.", "10 to 20% is common. Use more for long follow-up or sensitive surveys. The calculator enlarges the sample to cover it.", "Similar published studies, or your own experience of recruiting in this setting.", "common"],
+    sd: ["The standard deviation (SD): how much the measurement varies from person to person.", "A bigger SD needs more participants. Use the SD of the same outcome in a similar population, and make sure it is the SD and not the standard error.", "A pilot of 20 to 30 people, or published papers. If a paper gives the SE, then SD = SE x square root of n.", "specific"],
+    delta: ["The smallest difference between the group means that would be clinically important.", "Choose the smallest gap that would change practice, not the gap you hope to see. Halving it roughly quadruples the sample.", "Clinical judgement, guidelines, or the minimal clinically important difference reported for this outcome.", "specific"],
+    "paired:delta": ["The smallest average change (after minus before) that would be worthwhile.", "Choose the smallest change that would matter in practice. Halving it roughly quadruples the sample.", "Clinical judgement, guidelines, or published minimal important changes.", "specific"],
+    ratio: ["How many people in group 2 for each person in group 1.", "Use 1 for equal groups, which is the most efficient. Use 2 or more only when one group is easier to recruit, such as controls.", "Decided by your study design.", "specific"],
+    p1: ["The share of group 1 expected to have the outcome, as a decimal (70% is 0.70).", "Enter your best estimate. The gap between the two proportions is the effect you want to detect, and a smaller gap needs a much larger sample.", "Published studies or a pilot.", "specific"],
+    p2: ["The share of group 2 expected to have the outcome, as a decimal. It must differ from group 1.", "This is often the rate under standard care. The smaller its difference from group 1, the larger the sample.", "Hospital records, published studies or a pilot.", "specific"],
+    p: ["Your best estimate of the true prevalence, as a decimal.", "If you have no estimate, use 0.5, because it gives the largest and safest sample.", "Earlier surveys in a similar population.", "specific"],
+    d: ["The margin of error: how far your estimate may stray from the truth, as a decimal. 0.05 means plus or minus 5 percentage points.", "A smaller margin needs a bigger sample. 0.05 is typical. Use 0.03 or less when precision really matters.", "Your choice, based on how precise the result needs to be to be useful.", "specific"],
+    N: ["The total number of people in the group you are sampling from.", "Fill it in only if the population is small and known, because then the sample shrinks. Leave it blank if it is large or unknown.", "A register or roll of the population, such as a college list.", "specific"],
+    sdDiff: ["The SD of each person's change (after minus before).", "It is not the SD of the raw measurements. Work out each person's change first, then take the SD of those changes.", "A pilot with before and after measurements, or a paper that reports the SD of change.", "specific"],
+    r: ["The smallest correlation coefficient worth detecting.", "About 0.1 is weak, 0.3 moderate and 0.5 strong. A smaller r needs a much larger sample.", "Earlier studies of the same two variables, or the weakest relationship that would still matter.", "specific"]
+  };
+  /* optional preload from the address, e.g. ?design=twoMeans&sd=12&delta=6&power=0.8 (used by the guide's examples) */
+  var PARAMS = null;
+  try { PARAMS = new URLSearchParams(window.location.search); if (PARAMS.get("design") && specs[PARAMS.get("design")]) cur = PARAMS.get("design"); } catch (e) { PARAMS = null; }
 
   function setTabs() { $("tabs").innerHTML = keys.map(function (k) { return '<button class="chip" type="button" data-k="' + k + '" aria-pressed="' + (k === cur) + '">' + specs[k].name + "</button>"; }).join(""); }
   function setFields() {
     var sp = specs[cur]; $("dtitle").textContent = sp.name; $("ddesc").textContent = sp.desc;
-    $("fields").innerHTML = sp.fields.map(function (f) { return '<div class="f"><label for="f_' + f[0] + '">' + f[1] + '</label><input id="f_' + f[0] + '" type="number" step="' + f[3] + '" value="' + f[2] + '" inputmode="decimal"></div>'; }).join("");
+    $("fields").innerHTML = sp.fields.map(function (f) {
+      var tk = TIPS[cur + ":" + f[0]] ? cur + ":" + f[0] : f[0];
+      return '<div class="f"><label for="f_' + f[0] + '">' + f[1] + (TIPS[tk] ? ' <button class="q" type="button" data-t="' + tk + '" aria-label="Help: ' + f[1] + '" aria-expanded="false">?</button>' : "") + '</label><input id="f_' + f[0] + '" type="number" step="' + f[3] + '" value="' + f[2] + '" inputmode="decimal"></div>';
+    }).join("");
+    if (PARAMS) sp.fields.forEach(function (f) { var v = PARAMS.get(f[0]); if (v !== null && $("f_" + f[0])) $("f_" + f[0]).value = v; });
     $("sidesBox").style.display = sp.sides ? "" : "none"; $("powerBox").style.display = sp.power ? "" : "none";
     Array.prototype.forEach.call(document.querySelectorAll("#fields input"), function (i) { i.addEventListener("input", calc); });
   }
@@ -180,7 +214,37 @@
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () { $("copied").textContent = "Select and copy manually"; }); else $("copied").textContent = "Select and copy manually";
   });
   window.addEventListener("resize", calc);
+  /* "?" help cards: open on hover, keyboard focus or tap; close on leave, Escape, scroll or outside tap */
+  var box = $("tipbox"), openBtn = null;
+  function showTip(btn) {
+    var t = TIPS[btn.getAttribute("data-t")]; if (!t) return;
+    if (openBtn && openBtn !== btn) openBtn.setAttribute("aria-expanded", "false");
+    openBtn = btn; btn.setAttribute("aria-expanded", "true");
+    box.innerHTML = "<b>What it is</b>" + t[0] + "<b>How to choose</b>" + t[1] + "<b>Where the number comes from</b>" + t[2] + '<b>&nbsp;</b><a href="guide.html#' + (t[3] === "common" ? "common" : "specific") + '">More in the guide &rarr;</a>';
+    box.hidden = false;
+    var r = btn.getBoundingClientRect(), w = box.offsetWidth, h = box.offsetHeight, vw = window.innerWidth || 800, vh = window.innerHeight || 600;
+    var left = Math.min(Math.max(8, r.left - 8), Math.max(8, vw - w - 8)), top = r.bottom + 8;
+    if (top + h > vh - 8 && r.top - h - 8 > 8) top = r.top - h - 8;
+    box.style.left = left + "px"; box.style.top = top + "px";
+  }
+  function hideTip() { box.hidden = true; if (openBtn) openBtn.setAttribute("aria-expanded", "false"); openBtn = null; }
+  var qOf = function (e) { return e.target && e.target.closest ? e.target.closest(".q") : null; };
+  document.addEventListener("mouseover", function (e) { var b = qOf(e); if (b) showTip(b); });
+  document.addEventListener("mouseout", function (e) { if (qOf(e) && !(box.contains && box.contains(e.relatedTarget))) hideTip(); });
+  document.addEventListener("focusin", function (e) { var b = qOf(e); if (b) showTip(b); });
+  document.addEventListener("focusout", function (e) { if (qOf(e)) hideTip(); });
+  document.addEventListener("click", function (e) { var b = qOf(e); if (b) { e.preventDefault(); showTip(b); } else if (!(box.contains && box.contains(e.target))) hideTip(); });
+  /* touch: a tap toggles the card; preventDefault stops the emulated mouse events that would reopen it */
+  document.addEventListener("touchstart", function (e) {
+    var b = qOf(e);
+    if (b) { e.preventDefault(); if (openBtn === b && !box.hidden) hideTip(); else showTip(b); }
+    else if (!(box.contains && box.contains(e.target))) hideTip();
+  }, { passive: false });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") hideTip(); });
+  window.addEventListener("scroll", hideTip, { passive: true });
+  if (PARAMS) ["alpha", "power", "sides", "drop"].forEach(function (id) { var v = PARAMS.get(id); if (v !== null) $(id).value = v; });
   setTabs(); setFields(); calc();
+  PARAMS = null;  /* preload applies once; later tab switches use the defaults */
 })();
 </script>
 </body>
