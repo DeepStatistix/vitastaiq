@@ -5,3 +5,5 @@ node_modules/
 __pycache__/
 *.pyc
 .vscode/
+# local data pulls and keys
+*.env
