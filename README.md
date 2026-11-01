@@ -10,6 +10,11 @@ Data, automation and AI services from Kashmir, for local businesses, researchers
 | `site/demo/mandi/` | Mandi Intelligence dashboard built on public Agmarknet data from data.gov.in |
 | `site/demo/samplesize/` | Sample Size Calculator for medical theses (five designs, power curve, methods sentence; formulas in `calc.js`) |
 | `site/demo/forecast/` | Price Forecast Lab: 12-week forecasts with rolling backtests (`build_forecast.py` needs pandas, numpy, statsmodels) |
+| `site/thesis/` | Landing page for medical and allied-health thesis statistics support, with an enquiry form (opens a prefilled email) |
+| `site/tests/` | "Which statistical test should I use?" chooser, printable as a cheat sheet |
+| `site/research/` | Research and publications page |
+| `site/assets/og.png` | 1200x630 share image used in the Open Graph and Twitter tags (source: `design/og-card.html`) |
+| `site/sitemap.xml`, `site/robots.txt` | Search-engine files. The URLs assume the GitHub Pages address, so update them if you add a custom domain |
 
 Internal planning documents (pricing, outreach, brand notes) are kept in a separate private repository.
 

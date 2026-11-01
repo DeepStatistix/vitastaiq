@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Which statistical test should I use? Free chooser | VitastaIQ</title>
+  <meta name="description" content="Answer three questions and get the right statistical test, its assumptions, how to report it and the R function. A free, printable cheat sheet for thesis students.">
+  <link rel="canonical" href="https://deepstatistix.github.io/vitastaiq/tests/">
+  <meta property="og:site_name" content="VitastaIQ">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Which statistical test should I use? Free chooser | VitastaIQ">
+  <meta property="og:description" content="Answer three questions and get the right statistical test, its assumptions, how to report it and the R function. A free, printable cheat sheet for thesis students.">
+  <meta property="og:url" content="https://deepstatistix.github.io/vitastaiq/tests/">
+  <meta property="og:image" content="https://deepstatistix.github.io/vitastaiq/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Which statistical test should I use? Free chooser | VitastaIQ">
+  <meta name="twitter:description" content="Answer three questions and get the right statistical test, its assumptions, how to report it and the R function. A free, printable cheat sheet for thesis students.">
+  <meta name="twitter:image" content="https://deepstatistix.github.io/vitastaiq/assets/og.png">
+  <style>
+    :root { color-scheme: dark; --bg:#070b14; --bg2:#0d1424; --card:rgba(255,255,255,.045); --line:rgba(255,255,255,.09); --fg:#e9eef7; --muted:#8c9ab3; --a:#22d3c5; --b:#6aa8ff; --warm:#ffb454; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--fg); font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif; min-height:100vh;
+      background: radial-gradient(900px 500px at 85% -10%, rgba(34,211,197,.14), transparent 60%), radial-gradient(700px 420px at -10% 10%, rgba(106,168,255,.13), transparent 60%), linear-gradient(var(--bg), var(--bg2)) fixed; }
+    a { color:var(--a); }
+    .wrap { max-width:900px; margin:0 auto; padding:22px 16px 60px; }
+    .glass { background:var(--card); border:1px solid var(--line); border-radius:16px; }
+    header { display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:24px; }
+    .logo { font-weight:750; } .logo b { background:linear-gradient(90deg,var(--a),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .logo a { color:var(--muted); font-weight:500; text-decoration:none; font-size:.9rem; margin-left:10px; }
+    h1 { font-size:clamp(1.8rem,5vw,2.7rem); line-height:1.12; margin:0 0 10px; letter-spacing:-.02em; }
+    h1 span { background:linear-gradient(90deg,var(--a),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    h2 { font-size:1.35rem; margin:38px 0 6px; } .lede { color:var(--muted); font-size:1.05rem; margin:0 0 18px; }
+    .q { padding:18px 20px; margin-bottom:12px; } .q h3 { margin:0 0 4px; font-size:1.02rem; } .q p { margin:0 0 10px; color:var(--muted); font-size:.9rem; }
+    .opts { display:flex; flex-wrap:wrap; gap:8px; }
+    .chip { font:inherit; font-size:.92rem; color:var(--fg); background:transparent; border:1px solid var(--line); border-radius:12px; padding:9px 14px; cursor:pointer; text-align:left; }
+    .chip:hover { border-color:var(--a); } .chip[aria-pressed="true"] { color:#04121a; border-color:transparent; font-weight:650; background:linear-gradient(90deg,var(--a),var(--b)); }
+    .chip small { display:block; font-weight:400; opacity:.8; font-size:.78rem; }
+    .result { padding:22px; border-color:rgba(34,211,197,.45); margin-top:18px; }
+    .result .k { color:var(--a); font:650 .75rem ui-monospace,Menlo,Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; }
+    .result h2 { margin:4px 0 8px; font-size:1.7rem; }
+    .grid { display:grid; gap:12px; grid-template-columns:1fr 1fr; margin-top:14px; } @media (max-width:640px) { .grid { grid-template-columns:1fr; } }
+    .cell { padding:12px 14px; border:1px solid var(--line); border-radius:12px; } .cell b { display:block; color:var(--muted); font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; margin-bottom:2px; }
+    .cell ul { margin:0; padding-left:18px; } code { background:rgba(255,255,255,.08); padding:1px 6px; border-radius:6px; font-size:.92em; }
+    .btn { display:inline-block; font:inherit; font-weight:650; padding:9px 16px; border-radius:10px; border:0; cursor:pointer; text-decoration:none; color:#04121a; background:linear-gradient(90deg,var(--a),var(--b)); margin:12px 8px 0 0; }
+    .btn.ghost { color:var(--fg); background:transparent; border:1px solid var(--line); }
+    .tw { overflow-x:auto; } table { width:100%; border-collapse:collapse; font-size:.9rem; min-width:620px; } th,td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top; } th { color:var(--muted); font-size:.76rem; text-transform:uppercase; letter-spacing:.06em; }
+    .call { padding:14px 18px; border-left:3px solid var(--warm); border-radius:8px; background:rgba(0,0,0,.22); margin:14px 0; font-size:.94rem; }
+    .note { color:var(--muted); font-size:.82rem; margin-top:34px; border-top:1px solid var(--line); padding-top:14px; }
+    .hide { display:none; }
+    @media print {
+      :root { color-scheme: light; --bg:#fff; --bg2:#fff; --fg:#111; --muted:#444; --line:#bbb; --card:#fff; --a:#0a6a63; }
+      body { background:#fff !important; color:#111; font-size:11pt; } .glass { background:#fff; border-color:#bbb; }
+      header, .controls, .btn, #builder, .noprint { display:none !important; } h1 span, .logo b { color:#0a6a63; -webkit-text-fill-color:#0a6a63; background:none; }
+      .tw { overflow:visible; } table { min-width:0; font-size:9.5pt; } .result { display:none; } #fulltable { display:block !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="noprint"><div class="logo">Vitasta<b>IQ</b> <span style="color:var(--muted);font-weight:500">/ Test chooser</span><a href="../index.html">&larr; Home</a><a href="../demo/samplesize/index.html">Sample Size Calculator</a><a href="../thesis/index.html">Thesis support</a></div></header>
+
+  <h1>Which statistical test <span>should I use?</span></h1>
+  <p class="lede">Answer up to three questions and get the matching test, its assumptions, how to report it, and the R function. A free, printable cheat sheet for thesis students.</p>
+
+  <div id="builder">
+    <div class="q glass"><h3>1. What kind of outcome are you measuring?</h3><p>Your main (dependent) variable.</p>
+      <div class="opts" id="o1" role="group" aria-label="Outcome type">
+        <button class="chip" type="button" data-v="num" aria-pressed="false">A number<small>blood pressure, haemoglobin, a score out of 100</small></button>
+        <button class="chip" type="button" data-v="ord" aria-pressed="false">A rank or grade<small>pain 0 to 10, tumour grade, Likert scale</small></button>
+        <button class="chip" type="button" data-v="cat" aria-pressed="false">Categories<small>yes/no, cured/not cured, blood group</small></button>
+        <button class="chip" type="button" data-v="time" aria-pressed="false">Time to an event<small>survival, time to relapse</small></button>
+      </div></div>
+    <div class="q glass"><h3>2. What do you want to do?</h3><p>Your comparison or goal.</p>
+      <div class="opts" id="o2" role="group" aria-label="Goal">
+        <button class="chip" type="button" data-v="one" aria-pressed="false">Compare one group with a known value</button>
+        <button class="chip" type="button" data-v="two" aria-pressed="false">Compare two separate groups</button>
+        <button class="chip" type="button" data-v="paired" aria-pressed="false">Compare the same people twice<small>before and after, or matched pairs</small></button>
+        <button class="chip" type="button" data-v="multi" aria-pressed="false">Compare three or more separate groups</button>
+        <button class="chip" type="button" data-v="assoc" aria-pressed="false">See if two variables are related</button>
+        <button class="chip" type="button" data-v="predict" aria-pressed="false">Predict the outcome from several variables</button>
+      </div></div>
+    <div class="q glass hide" id="q3"><h3>3. Is the number roughly normally distributed?</h3><p>Look at a histogram or run a normality test (for example Shapiro-Wilk). With about 30 or more per group and no extreme outliers, "yes" is usually reasonable. For paired data, check the <i>differences</i>.</p>
+      <div class="opts" id="o3" role="group" aria-label="Normality">
+        <button class="chip" type="button" data-v="yes" aria-pressed="true">Yes, roughly normal</button>
+        <button class="chip" type="button" data-v="no" aria-pressed="false">No, skewed or small sample with outliers</button>
+      </div></div>
+  </div>
+
+  <div class="result glass hide" id="result" aria-live="polite"></div>
+
+  <div class="call noprint"><b>Always:</b> decide your test <i>before</i> you look at the results, state it in your protocol, and report the effect size with a 95% confidence interval as well as the p-value. If your design is not listed (for example repeated measurements over time, clustered data, or several outcomes), ask a statistician.</div>
+
+  <div class="noprint"><button class="btn" type="button" id="print">Print or save the full cheat sheet as PDF</button></div>
+
+  <h2>The full cheat sheet</h2>
+  <div class="tw" id="fulltable"><table>
+    <tr><th>Goal</th><th>Number, roughly normal</th><th>Number not normal, or rank</th><th>Categories</th></tr>
+    <tr><td>One group vs known value</td><td>One-sample t-test</td><td>Wilcoxon signed-rank (one-sample)</td><td>Binomial or one-sample proportion test</td></tr>
+    <tr><td>Two separate groups</td><td>Independent t-test (Welch)</td><td>Mann-Whitney U</td><td>Chi-square; Fisher exact if expected counts &lt; 5</td></tr>
+    <tr><td>Same people twice</td><td>Paired t-test</td><td>Wilcoxon signed-rank</td><td>McNemar test</td></tr>
+    <tr><td>Three or more separate groups</td><td>One-way ANOVA, then Tukey post-hoc</td><td>Kruskal-Wallis, then Dunn post-hoc</td><td>Chi-square (r by c) or Fisher-Freeman-Halton</td></tr>
+    <tr><td>Relationship of two variables</td><td>Pearson correlation</td><td>Spearman correlation</td><td>Chi-square or Fisher; Cramer's V for strength</td></tr>
+    <tr><td>Predict from several variables</td><td>Multiple linear regression</td><td>Ordinal logistic regression, or transform / robust methods</td><td>Binary logistic regression (odds ratios)</td></tr>
+    <tr><td>Time to event</td><td colspan="3">Kaplan-Meier curves with log-rank test; Cox regression to adjust for other variables</td></tr>
+  </table></div>
+
+  <p class="note">A planning aid from VitastaIQ for students, not a substitute for advice on your specific study. Choosing a test also depends on your study design, sampling and sample size. Need help with the analysis for your thesis? <a href="../thesis/index.html">See thesis support</a> or <a href="../index.html#contact">contact us</a>.</p>
+</div>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var st = { o: null, g: null, n: "yes" };
+  /* [name, why, assumptions, report, R function, calculator tab or "" ] */
+  var T = {
+    "num:one": { y: ["One-sample t-test", "Compares the mean of one group with a fixed reference value.", ["Observations are independent", "Values roughly normal (or n large)"], "Mean (SD), mean difference with 95% CI, t, df, p", "t.test(x, mu = value)", ""], n: ["Wilcoxon signed-rank test (one-sample)", "Compares the median with a reference value without assuming normality.", ["Independent observations", "Roughly symmetric distribution"], "Median (IQR), V statistic, p", "wilcox.test(x, mu = value)", ""] },
+    "num:two": { y: ["Independent-samples t-test (Welch)", "Compares the means of two separate groups. Welch's version does not assume equal variances and is a safe default.", ["Independent groups", "Each group roughly normal (or n large)"], "Mean (SD) per group, mean difference with 95% CI, t, df, p, effect size (Cohen's d)", "t.test(y ~ group)", "twoMeans"], n: ["Mann-Whitney U test", "Compares two separate groups when the data are skewed, have outliers or are ranks.", ["Independent groups", "Similar shape if you wish to compare medians"], "Median (IQR) per group, U, p, effect size (rank-biserial r)", "wilcox.test(y ~ group)", ""] },
+    "num:paired": { y: ["Paired t-test", "Compares the mean change in the same people measured twice, or in matched pairs.", ["Pairs are independent of each other", "The differences are roughly normal"], "Mean difference with 95% CI, t, df, p, effect size", "t.test(after, before, paired = TRUE)", "paired"], n: ["Wilcoxon signed-rank test", "Compares paired measurements when the differences are not normal.", ["Pairs are independent", "Differences roughly symmetric"], "Median difference (IQR), V, p", "wilcox.test(after, before, paired = TRUE)", ""] },
+    "num:multi": { y: ["One-way ANOVA with Tukey post-hoc", "Compares the means of three or more separate groups in one test, then shows which pairs differ.", ["Independent groups", "Roughly normal within each group", "Similar variances (check Levene's test)"], "Mean (SD) per group, F, df, p, effect size (eta squared), post-hoc adjusted p-values", "aov(y ~ group); TukeyHSD()", ""], n: ["Kruskal-Wallis test with Dunn post-hoc", "Compares three or more separate groups without assuming normality.", ["Independent groups", "Similar shapes if you wish to compare medians"], "Median (IQR) per group, H, df, p, adjusted pairwise p-values", "kruskal.test(y ~ group); FSA::dunnTest()", ""] },
+    "num:assoc": { y: ["Pearson correlation", "Measures the strength of a straight-line relationship between two numbers.", ["Both variables roughly normal", "Relationship looks linear on a scatter plot", "No extreme outliers"], "r with 95% CI, n, p. Always show a scatter plot", "cor.test(x, y)", "corr"], n: ["Spearman rank correlation", "Measures a monotonic relationship using ranks. Suits skewed data, outliers and ordinal scales.", ["Relationship consistently rising or falling", "Independent observations"], "rho, n, p. Show a scatter plot", "cor.test(x, y, method = \"spearman\")", "corr"] },
+    "num:predict": { y: ["Multiple linear regression", "Estimates how several predictors together explain a numeric outcome, adjusting for each other.", ["Linear relationships", "Residuals roughly normal with constant spread", "Independent observations", "Predictors not too strongly correlated"], "Coefficients (B) with 95% CI and p, adjusted R squared, residual checks", "lm(y ~ x1 + x2 + x3)", ""], n: ["Linear regression after transformation, or a robust method", "If the outcome is skewed, a log transform often fixes the residuals. Otherwise ask a statistician about robust or generalised models.", ["Check residual plots after transforming"], "Coefficients (back-transformed if logged) with 95% CI and p", "lm(log(y) ~ x1 + x2)", ""] },
+    "ord:one": { y: ["Wilcoxon signed-rank test (one-sample)", "Compares the median score with a reference value.", ["Independent observations"], "Median (IQR), V, p", "wilcox.test(x, mu = value)", ""] },
+    "ord:two": { y: ["Mann-Whitney U test", "Compares ranks or grades between two separate groups.", ["Independent groups"], "Median (IQR) per group, U, p, effect size", "wilcox.test(y ~ group)", ""] },
+    "ord:paired": { y: ["Wilcoxon signed-rank test", "Compares ranks or scores in the same people twice.", ["Independent pairs"], "Median difference (IQR), V, p", "wilcox.test(after, before, paired = TRUE)", ""] },
+    "ord:multi": { y: ["Kruskal-Wallis test with Dunn post-hoc", "Compares ranks or grades across three or more separate groups.", ["Independent groups"], "Median (IQR) per group, H, df, p, adjusted pairwise p-values", "kruskal.test(y ~ group)", ""] },
+    "ord:assoc": { y: ["Spearman rank correlation", "Measures a monotonic relationship between ranks or scores.", ["Independent observations"], "rho, n, p", "cor.test(x, y, method = \"spearman\")", "corr"] },
+    "ord:predict": { y: ["Ordinal logistic regression", "Models an ordered outcome (such as a grade) from several predictors. Discuss with a statistician before relying on it.", ["Proportional odds assumption (test it)"], "Odds ratios with 95% CI and p", "MASS::polr(y ~ x1 + x2, Hess = TRUE)", ""] },
+    "cat:one": { y: ["Binomial test or one-sample proportion test", "Compares an observed proportion with a known or expected one. To estimate a prevalence with a margin of error instead, use the calculator's prevalence tab.", ["Independent observations"], "Proportion with 95% CI, p", "binom.test(x, n, p = value)", "oneProp"] },
+    "cat:two": { y: ["Chi-square test (or Fisher's exact test)", "Compares the proportions of an outcome between two separate groups. Use Fisher's exact test when any expected cell count is below 5.", ["Independent groups", "Expected count of at least 5 in most cells for chi-square"], "Counts and % per group, risk difference or odds ratio with 95% CI, p", "chisq.test(table(group, outcome)); fisher.test(...)", "twoProps"] },
+    "cat:paired": { y: ["McNemar test", "Compares a yes/no outcome in the same people twice, or in matched pairs.", ["Paired binary data"], "Discordant pairs, odds ratio with 95% CI, p", "mcnemar.test(table(before, after))", ""] },
+    "cat:multi": { y: ["Chi-square test (r by c) or Fisher-Freeman-Halton", "Compares the distribution of categories across three or more groups.", ["Independent groups", "Adequate expected counts"], "Counts and % per group, chi-square, df, p, Cramer's V", "chisq.test(table(group, outcome))", ""] },
+    "cat:assoc": { y: ["Chi-square or Fisher's exact test, with Cramer's V", "Tests whether two categorical variables are associated, and how strongly.", ["Independent observations", "Adequate expected counts (else Fisher)"], "Cross-tabulation with %, p, Cramer's V", "chisq.test(table(a, b)); fisher.test(...)", ""] },
+    "cat:predict": { y: ["Binary logistic regression", "Models a yes/no outcome from several predictors and gives adjusted odds ratios.", ["Independent observations", "Enough events per predictor (roughly 10)", "No severe multicollinearity"], "Adjusted odds ratios with 95% CI and p, model fit, AUC if predicting", "glm(y ~ x1 + x2, family = binomial)", ""] },
+    "time:one": { y: ["Kaplan-Meier estimate", "Describes survival in one group, for example median survival with its confidence interval.", ["Censoring is unrelated to the outcome"], "Median survival with 95% CI, survival at fixed times", "survival::survfit(Surv(time, event) ~ 1)", ""] },
+    "time:two": { y: ["Kaplan-Meier curves with the log-rank test", "Compares time-to-event between two groups.", ["Independent groups", "Censoring unrelated to the outcome"], "KM curves, median survival per group, log-rank p, hazard ratio with 95% CI", "survival::survdiff(Surv(time, event) ~ group)", ""] },
+    "time:paired": { y: ["Needs a specialist method", "Matched or repeated time-to-event data need stratified or frailty models. Please ask a statistician.", [], "", "", ""] },
+    "time:multi": { y: ["Log-rank test across groups", "Compares time-to-event across three or more groups, with Kaplan-Meier curves.", ["Independent groups", "Censoring unrelated to the outcome"], "KM curves, log-rank chi-square, df, p", "survival::survdiff(Surv(time, event) ~ group)", ""] },
+    "time:assoc": { y: ["Cox proportional hazards regression", "To relate a numeric predictor to time-to-event, use a Cox model.", ["Proportional hazards (test it)", "Independent observations"], "Hazard ratio with 95% CI and p", "survival::coxph(Surv(time, event) ~ x)", ""] },
+    "time:predict": { y: ["Cox proportional hazards regression", "Models time-to-event from several predictors and gives adjusted hazard ratios.", ["Proportional hazards (test it)", "Enough events per predictor (roughly 10)"], "Adjusted hazard ratios with 95% CI and p", "survival::coxph(Surv(time, event) ~ x1 + x2)", ""] }
+  };
+  var CALC = { twoMeans: "Compare two means", twoProps: "Compare two proportions", oneProp: "Estimate a prevalence", paired: "Paired means", corr: "Correlation" };
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function show() {
+    var need3 = st.o === "num" && st.g && st.g !== "predict" || (st.o === "num" && st.g === "predict");
+    $("q3").classList.toggle("hide", !(st.o === "num" && st.g));
+    var r = $("result");
+    if (!st.o || !st.g) { r.classList.add("hide"); return; }
+    var entry = T[st.o + ":" + st.g]; if (!entry) { r.classList.add("hide"); return; }
+    var v = entry[st.o === "num" && st.n === "no" ? "n" : "y"] || entry.y;
+    var calcLink = v[5] ? '<a class="btn" href="../demo/samplesize/index.html?design=' + v[5] + '">Plan the sample size (' + CALC[v[5]] + ' tab)</a>' : "";
+    r.innerHTML = '<div class="k">Suggested test</div><h2>' + esc(v[0]) + "</h2><p>" + esc(v[1]) + "</p>" +
+      '<div class="grid"><div class="cell"><b>Assumptions to check</b>' + (v[2].length ? "<ul>" + v[2].map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("") + "</ul>" : "None to list. Ask a statistician.") + "</div>" +
+      '<div class="cell"><b>How to report it</b>' + esc(v[3] || "Ask a statistician.") + "</div>" +
+      '<div class="cell"><b>In R</b>' + (v[4] ? "<code>" + esc(v[4]) + "</code>" : "Not applicable") + "</div>" +
+      '<div class="cell"><b>In SPSS</b>' + esc(spss(st.o, st.g)) + "</div></div>" + calcLink +
+      '<a class="btn ghost" href="../thesis/index.html">Get help with the analysis</a>';
+    r.classList.remove("hide");
+  }
+  function spss(o, g) {
+    if (o === "time") return "Analyze > Survival > Kaplan-Meier, or Cox Regression";
+    if (o === "cat") return g === "predict" ? "Analyze > Regression > Binary Logistic" : "Analyze > Descriptive Statistics > Crosstabs (Statistics: chi-square, McNemar)";
+    if (g === "predict") return o === "ord" ? "Analyze > Regression > Ordinal" : "Analyze > Regression > Linear";
+    if (g === "assoc") return "Analyze > Correlate > Bivariate";
+    return "Analyze > Compare Means (t-tests, ANOVA), or Analyze > Nonparametric Tests";
+  }
+  function pick(id, key) {
+    $(id).addEventListener("click", function (e) {
+      var b = e.target.closest && e.target.closest("button"); if (!b) return;
+      st[key] = b.getAttribute("data-v");
+      Array.prototype.forEach.call(this.children, function (c) { c.setAttribute("aria-pressed", c === b ? "true" : "false"); });
+      show();
+    });
+  }
+  pick("o1", "o"); pick("o2", "g"); pick("o3", "n");
+  $("print").addEventListener("click", function () { window.print(); });
+  window.CHEAT = { T: T, show: show, state: st, spss: spss };
+})();
+</script>
+</body>
+</html>

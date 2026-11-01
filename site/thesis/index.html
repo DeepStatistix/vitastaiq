@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Thesis statistics support for medical students | VitastaIQ</title>
+  <meta name="description" content="Statistics support for medical, dental, nursing and allied-health theses: sample size, analysis plan, SPSS or R analysis, tables and figures, and viva preparation. You stay the author.">
+  <link rel="canonical" href="https://deepstatistix.github.io/vitastaiq/thesis/">
+  <meta property="og:site_name" content="VitastaIQ">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Thesis statistics support for medical students | VitastaIQ">
+  <meta property="og:description" content="Statistics support for medical, dental, nursing and allied-health theses: sample size, analysis plan, SPSS or R analysis, tables and figures, and viva preparation. You stay the author.">
+  <meta property="og:url" content="https://deepstatistix.github.io/vitastaiq/thesis/">
+  <meta property="og:image" content="https://deepstatistix.github.io/vitastaiq/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Thesis statistics support for medical students | VitastaIQ">
+  <meta name="twitter:description" content="Statistics support for medical, dental, nursing and allied-health theses: sample size, analysis plan, SPSS or R analysis, tables and figures, and viva preparation. You stay the author.">
+  <meta name="twitter:image" content="https://deepstatistix.github.io/vitastaiq/assets/og.png">
+  <style>
+    :root { color-scheme: dark; --bg:#070b14; --bg2:#0d1424; --card:rgba(255,255,255,.045); --line:rgba(255,255,255,.09); --fg:#e9eef7; --muted:#8c9ab3; --a:#22d3c5; --b:#6aa8ff; --warm:#ffb454; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; scroll-padding-top:16px; }
+    body { margin:0; color:var(--fg); font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif; min-height:100vh;
+      background: radial-gradient(900px 520px at 85% -8%, rgba(34,211,197,.15), transparent 60%), radial-gradient(700px 440px at -10% 8%, rgba(106,168,255,.14), transparent 60%), linear-gradient(var(--bg), var(--bg2)) fixed; }
+    a { color:var(--a); }
+    .wrap { max-width:1000px; margin:0 auto; padding:22px 16px 60px; }
+    .glass { background:var(--card); border:1px solid var(--line); border-radius:16px; }
+    header { display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:34px; }
+    .logo { font-weight:750; } .logo b { background:linear-gradient(90deg,var(--a),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .logo a { color:var(--muted); font-weight:500; text-decoration:none; font-size:.9rem; margin-left:10px; }
+    .kicker { color:var(--a); font:650 .78rem ui-monospace,Menlo,Consolas,monospace; text-transform:uppercase; letter-spacing:.14em; }
+    h1 { font-size:clamp(2rem,6vw,3.3rem); line-height:1.08; margin:8px 0 12px; letter-spacing:-.025em; max-width:20ch; }
+    h1 span { background:linear-gradient(90deg,var(--a),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    h2 { font-size:clamp(1.4rem,3.4vw,2rem); margin:52px 0 6px; letter-spacing:-.02em; line-height:1.15; }
+    .lede { color:var(--muted); font-size:1.1rem; max-width:60ch; margin:0 0 22px; } .sub { color:var(--muted); max-width:62ch; margin:0 0 16px; }
+    .btn { display:inline-block; font:inherit; font-weight:650; padding:12px 22px; border-radius:10px; border:0; text-decoration:none; cursor:pointer; color:#04121a; background:linear-gradient(90deg,var(--a),var(--b)); box-shadow:0 8px 28px rgba(34,211,197,.22); }
+    .btn.ghost { color:var(--fg); background:transparent; border:1px solid var(--line); box-shadow:none; margin-left:8px; } @media (max-width:480px) { .btn.ghost { margin:10px 0 0; } }
+    .tools { display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); margin-top:30px; }
+    .tool { padding:16px 18px; text-decoration:none; color:var(--fg); transition:transform .2s,border-color .2s; } .tool:hover { transform:translateY(-3px); border-color:rgba(34,211,197,.5); }
+    .tool b { display:block; } .tool span { color:var(--muted); font-size:.9rem; } .tool i { font-style:normal; color:var(--a); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; }
+    .who { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; } .who span { padding:6px 14px; border:1px solid var(--line); border-radius:99px; font-size:.92rem; background:var(--card); }
+    .steps { display:grid; gap:12px; counter-reset:s; } .step { display:grid; grid-template-columns:44px 1fr; gap:14px; padding:16px 18px; counter-increment:s; }
+    .step::before { content:counter(s); font-weight:800; font-size:1.3rem; width:38px; height:38px; display:grid; place-items:center; border-radius:12px; color:#04121a; background:linear-gradient(135deg,var(--a),var(--b)); }
+    .step b { display:block; } .step span { color:var(--muted); font-size:.94rem; }
+    .cards { display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
+    .card { padding:22px; display:flex; flex-direction:column; } .card h3 { margin:0 0 4px; font-size:1.15rem; } .card p { color:var(--muted); font-size:.94rem; margin:0 0 10px; }
+    .card ul { margin:0 0 14px; padding-left:18px; color:var(--muted); font-size:.92rem; flex:1; } .card li { margin:3px 0; } .card .btn { text-align:center; padding:10px 16px; }
+    .card.feat { border-color:rgba(34,211,197,.5); } .pill { align-self:flex-start; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--a); border:1px solid rgba(34,211,197,.45); border-radius:99px; padding:1px 9px; margin-bottom:8px; }
+    .two { display:grid; gap:14px; grid-template-columns:1fr 1fr; } @media (max-width:700px) { .two { grid-template-columns:1fr; } }
+    .box { padding:20px; } .box h3 { margin:0 0 8px; } .box ul { margin:0; padding-left:20px; color:var(--muted); font-size:.95rem; } .box li { margin:4px 0; }
+    .yes { border-left:3px solid var(--a); } .no { border-left:3px solid var(--warm); }
+    details { border:1px solid var(--line); border-radius:12px; background:var(--card); padding:14px 18px; margin-bottom:10px; } summary { cursor:pointer; font-weight:600; } details p { color:var(--muted); margin:10px 0 0; font-size:.95rem; }
+    form { display:grid; gap:12px; padding:22px; } .row2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; } @media (max-width:600px) { .row2 { grid-template-columns:1fr; } }
+    label { font-size:.84rem; color:var(--muted); display:block; margin-bottom:3px; }
+    input, select, textarea { font:inherit; color:var(--fg); background:rgba(0,0,0,.3); border:1px solid var(--line); border-radius:10px; padding:11px 13px; width:100%; }
+    input:focus, select:focus, textarea:focus { outline:2px solid var(--a); outline-offset:1px; }
+    .warn { padding:12px 16px; border-left:3px solid var(--warm); border-radius:8px; background:rgba(0,0,0,.22); font-size:.9rem; color:#d7e0ee; }
+    .note { color:var(--muted); font-size:.82rem; margin-top:40px; border-top:1px solid var(--line); padding-top:14px; }
+    footer { margin-top:40px; color:var(--muted); font-size:.88rem; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header><div class="logo">Vitasta<b>IQ</b> <span style="color:var(--muted);font-weight:500">/ Thesis support</span><a href="../index.html">&larr; Home</a><a href="../demo/samplesize/index.html">Sample Size Calculator</a><a href="../tests/index.html">Test chooser</a></div></header>
+
+  <div class="kicker">For medical &amp; allied-health students</div>
+  <h1>Statistics for your thesis, <span>explained properly.</span></h1>
+  <p class="lede">From sample size to a result you can defend at your viva. We help you design the analysis, run it on your own data, and understand every number. <b>You stay the author.</b></p>
+  <a class="btn" href="#enquire">Ask for a quote</a><a class="btn ghost" href="#stages">See how we help</a>
+
+  <div class="tools">
+    <a class="tool glass" href="../demo/samplesize/index.html"><i>Free tool</i><b>Sample Size Calculator</b><span>Five designs, a methods sentence you can adapt, and "?" help on every box.</span></a>
+    <a class="tool glass" href="../tests/index.html"><i>Free tool</i><b>Which test should I use?</b><span>Answer three questions, get the test, its assumptions and how to report it.</span></a>
+    <a class="tool glass" href="../demo/samplesize/guide.html"><i>Free guide</i><b>Step-by-step calculator guide</b><span>Plain-language help with worked examples you can open.</span></a>
+  </div>
+
+  <h2>Who this is for</h2>
+  <p class="sub">Students and researchers who need sound statistics for their dissertation, protocol or paper.</p>
+  <div class="who"><span>MD / MS</span><span>DNB</span><span>MDS / BDS</span><span>MSc Nursing</span><span>MPH and public health</span><span>Allied health</span><span>PhD scholars</span><span>Faculty researchers</span></div>
+
+  <h2 id="stages">Support at every stage</h2>
+  <p class="sub">Come at any point. The earlier you start, the more we can prevent.</p>
+  <div class="steps">
+    <div class="step glass"><div><b>Protocol and sample size</b><span>Choose the design, define the outcome, and justify your sample size with a clear methods paragraph.</span></div></div>
+    <div class="step glass"><div><b>Data sheet and coding</b><span>A clean data-entry template with coded variables, so analysis does not turn into a clean-up project.</span></div></div>
+    <div class="step glass"><div><b>Data cleaning and checks</b><span>Spot errors, missing values and outliers, and document what was done.</span></div></div>
+    <div class="step glass"><div><b>Analysis plan and analysis</b><span>The right tests for your questions, run in SPSS or R, with the assumptions checked.</span></div></div>
+    <div class="step glass"><div><b>Tables, figures and interpretation</b><span>Publication-ready tables and charts, and a plain-language explanation of what each result means.</span></div></div>
+    <div class="step glass"><div><b>Viva and examiner questions</b><span>A session to walk through your methods and results, and to prepare for statistical questions.</span></div></div>
+  </div>
+
+  <h2>Ways to work together</h2>
+  <p class="sub">Every project gets a written scope and a fixed quote after a short conversation.</p>
+  <div class="cards">
+    <div class="card glass"><div class="pill">Quick help</div><h3>Consultation</h3><p>One-to-one session when you are stuck or want a second opinion.</p><ul><li>Study design and sample size</li><li>Choosing the right test</li><li>Reviewing your analysis plan</li><li>Examiner or reviewer comments</li></ul><a class="btn ghost" href="#enquire" style="margin:0">Request a quote</a></div>
+    <div class="card glass feat"><div class="pill">Most requested</div><h3>Analysis package</h3><p>We analyse your collected data and explain the results.</p><ul><li>Data cleaning and checks</li><li>Analysis in SPSS or R</li><li>Tables and figures</li><li>Written explanation of every result</li><li>One round of revisions</li></ul><a class="btn" href="#enquire" style="margin:0">Request a quote</a></div>
+    <div class="card glass"><div class="pill">Start to finish</div><h3>Full thesis statistics</h3><p>Support from protocol to viva.</p><ul><li>Sample size and protocol methods</li><li>Data sheet design</li><li>Complete analysis and interpretation</li><li>Methods and results review</li><li>Viva preparation session</li></ul><a class="btn ghost" href="#enquire" style="margin:0">Request a quote</a></div>
+  </div>
+
+  <h2>Our line</h2>
+  <div class="two">
+    <div class="box glass yes"><h3>What we do</h3><ul><li>Design, analyse and interpret <i>your</i> real data</li><li>Teach you the method so you can explain and defend it</li><li>Document every step so your work is reproducible</li><li>Keep your data confidential</li></ul></div>
+    <div class="box glass no"><h3>What we never do</h3><ul><li>Write your thesis or conclusions for you</li><li>Invent, alter or remove data to get a result</li><li>Hide results that disagree with your hypothesis</li><li>Promise a "significant" p-value</li></ul></div>
+  </div>
+  <p class="sub" style="margin-top:14px">Statistical support is a normal part of research, but rules differ between universities. Please check your institution's policy on external help and acknowledge our contribution if required.</p>
+
+  <h2>Keeping your data safe</h2>
+  <div class="warn"><b>Never send patient names, phone numbers, addresses or hospital IDs.</b> Share only coded data, where each participant is a number, with no way to identify them. Do not send identifiable data by email or message. We will agree how to share your dataset before you send anything.</div>
+
+  <h2>Questions students ask</h2>
+  <div>
+    <details><summary>Will you write my thesis?</summary><p>No. We help with design, analysis and interpretation of your own data and teach you the results, so the writing, discussion and conclusions stay yours.</p></details>
+    <details><summary>Can you help if my data is already collected?</summary><p>Yes. Send a description of your study and variables. We check what analysis your data can support and tell you honestly if there are problems, such as a sample that is too small for your question.</p></details>
+    <details><summary>Which software do you use?</summary><p>SPSS or R, depending on what you or your department prefer. You receive the outputs and a plain explanation either way.</p></details>
+    <details><summary>How is the price decided?</summary><p>After a short scoping conversation we give a written, fixed quote based on your data, the analysis needed and your deadline. Students are welcome to ask about options that fit a limited budget.</p></details>
+    <details><summary>How soon can you start?</summary><p>Small questions can often be answered within days. For full analyses, share your deadline in the form and we will agree a timeline in writing. Contact us early if you have a hard submission date.</p></details>
+    <details><summary>Will you help me answer examiners or reviewers?</summary><p>Yes. We can review statistical comments, check what needs re-analysis and explain clearly what to write in your reply.</p></details>
+  </div>
+
+  <h2 id="enquire">Ask for a quote</h2>
+  <p class="sub">Tell us a little about your study. It takes two minutes. This opens an email to us with your details ready to send.</p>
+  <form class="glass" id="form">
+    <div class="row2"><div><label for="name">Your name</label><input id="name" required autocomplete="name"></div><div><label for="contact">Email or WhatsApp number</label><input id="contact" required></div></div>
+    <div class="row2"><div><label for="degree">Degree</label><select id="degree"><option>MD / MS</option><option>DNB</option><option>MDS / BDS</option><option>MSc Nursing</option><option>MPH / public health</option><option>Other allied health</option><option>PhD</option><option>Faculty / other</option></select></div>
+      <div><label for="dept">Department or specialty</label><input id="dept" placeholder="for example Community Medicine"></div></div>
+    <div class="row2"><div><label for="stage">Where are you now?</label><select id="stage"><option>Planning the study / protocol</option><option>Data collection in progress</option><option>Data collected, analysis needed</option><option>Analysis done, needs checking</option><option>Responding to examiners or reviewers</option></select></div>
+      <div><label for="deadline">Submission deadline (if any)</label><input id="deadline" type="date"></div></div>
+    <div class="row2"><div><label for="design">Study design (if you know)</label><select id="design"><option>Not sure</option><option>Cross-sectional survey</option><option>Case-control</option><option>Cohort</option><option>Randomised or clinical trial</option><option>Before and after</option><option>Diagnostic accuracy</option><option>Laboratory / experimental</option></select></div>
+      <div><label for="software">Preferred software</label><select id="software"><option>No preference</option><option>SPSS</option><option>R</option></select></div></div>
+    <div><label for="msg">What do you need help with?</label><textarea id="msg" rows="5" required placeholder="Your research question, main outcome, planned sample size and anything you are stuck on. No patient identifiers, please."></textarea></div>
+    <button class="btn" type="submit">Send by email</button>
+    <span class="sub" style="margin:0;font-size:.82rem">This opens your email app with the message ready to send to vitastaiq@gmail.com. Do not include identifiable patient data.</span>
+  </form>
+
+  <p class="note">VitastaIQ is led by Dr. Aqib Gul, PhD in Statistics (SKUAST-Kashmir). See <a href="../research/index.html">the research behind the work</a>. Free tools are planning aids, not a substitute for advice on your specific study.</p>
+  <footer>&copy; 2026 VitastaIQ &middot; Srinagar, Kashmir &middot; <a href="mailto:vitastaiq@gmail.com">vitastaiq@gmail.com</a></footer>
+</div>
+<script>
+document.getElementById("form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  var g = function (id) { return document.getElementById(id).value.trim(); };
+  var body = "Name: " + g("name") + "\nContact: " + g("contact") + "\nDegree: " + g("degree") + "\nDepartment: " + g("dept") + "\nStage: " + g("stage") +
+    "\nDeadline: " + (g("deadline") || "not given") + "\nStudy design: " + g("design") + "\nSoftware: " + g("software") + "\n\n" + g("msg");
+  window.location.href = "mailto:vitastaiq@gmail.com?subject=" + encodeURIComponent("Thesis statistics enquiry: " + g("degree") + ", " + g("stage")) + "&body=" + encodeURIComponent(body);
+});
+</script>
+</body>
+</html>
