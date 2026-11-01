@@ -4,115 +4,322 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>VitastaIQ</title>
-  <meta name="description" content="Data, automation and AI services from Kashmir for businesses, researchers and learners.">
+  <meta name="description" content="Statistics, data and AI services from Kashmir: medical thesis analysis, dashboards, organisational analytics, forecasting and training.">
+  <meta property="og:title" content="VitastaIQ: statistics, data and AI from Kashmir">
+  <meta property="og:description" content="Medical thesis statistics, dashboards, analytics for organisations, forecasting, AI assistants and training.">
+  <meta property="og:type" content="website">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="top">
     <div class="wrap">
       <a class="brand" href="#">Vitasta<span>IQ</span></a>
-      <nav>
+      <nav aria-label="Main">
         <a href="#services">Services</a>
-        <a href="#work">Work</a>
-        <a href="#contact">Contact</a>
+        <a href="#demo">Live demo</a>
+        <a href="#process">Process</a>
+        <a href="#about">About</a>
+        <a href="#faq">FAQ</a>
+        <a class="cta" href="#contact">Start a project</a>
       </nav>
     </div>
   </header>
 
   <main>
     <div class="wrap hero">
-      <h1>Data and automation, built in Kashmir.</h1>
-      <p>We help local businesses, researchers and learners turn messy data and repetitive work into clear reports, working tools and real skills.</p>
-      <a class="btn" href="#contact">Start a project</a>
-      <a class="btn alt" href="#services">See services</a>
+      <div class="eyebrow glass"><span class="dot"></span> Statistics &middot; Data &middot; AI &mdash; from Kashmir</div>
+      <h1>From messy data to <span class="rot grad" id="rot" aria-live="off">decisions</span></h1>
+      <p class="lede">We help researchers, medical students, businesses and organisations turn raw numbers into sound analysis, clear dashboards and tools that keep working after we leave.</p>
+      <a class="btn primary" href="#contact">Start a project</a>
+      <a class="btn ghost" href="#demo">See a live dashboard</a>
+
+      <div class="strip" id="strip">
+        <div class="stat glass"><div class="n" data-count="17">0</div><div class="l">Peer-reviewed journal articles</div></div>
+        <div class="stat glass"><div class="n" data-count="150" data-suffix="+">0</div><div class="l">Market price series forecast</div></div>
+        <div class="stat glass live" id="liveA" hidden><div class="n" data-count="0" id="liveMarkets">0</div><div class="l">Mandis reporting today</div></div>
+        <div class="stat glass live" id="liveB" hidden><div class="n" data-count="0" id="liveComm">0</div><div class="l">Commodities tracked live</div></div>
+      </div>
     </div>
 
     <section id="services">
       <div class="wrap">
-        <h2>What we do</h2>
-        <p class="lead">Three focused services. Fixed scope, clear pricing, delivered on time.</p>
-        <div class="grid">
-          <div class="card">
-            <span class="tag">Business</span>
-            <h3>Data &amp; Automation</h3>
+        <div class="kicker rv">What we do</div>
+        <h2 class="rv">Services, built around real expertise</h2>
+        <p class="sub rv">Pick an area or browse everything. Every project starts with a written scope and a fixed quote, so there are no surprises.</p>
+
+        <div class="filters rv" id="filters" role="group" aria-label="Filter services">
+          <button class="chip" type="button" data-f="all" aria-pressed="true">All</button>
+          <button class="chip" type="button" data-f="med" aria-pressed="false">Medical &amp; research</button>
+          <button class="chip" type="button" data-f="biz" aria-pressed="false">Business &amp; organisations</button>
+          <button class="chip" type="button" data-f="ai" aria-pressed="false">AI &amp; forecasting</button>
+          <button class="chip" type="button" data-f="agri" aria-pressed="false">Agriculture</button>
+          <button class="chip" type="button" data-f="learn" aria-pressed="false">Learn</button>
+        </div>
+
+        <div class="cards" id="cards">
+          <article class="card glass rv" data-c="med">
+            <span class="tag">Medical</span><div class="ico">🩺</div>
+            <h3>Thesis &amp; dissertation statistics</h3>
+            <p>Statistical support for MD, MS, DNB, dental, nursing and allied-health theses, and for PhD scholars.</p>
+            <ul><li>Study design and sample size</li><li>Data sheets, cleaning and coding</li><li>SPSS, R or Python analysis</li><li>Tables, figures and plain-language interpretation</li><li>Help to explain every test at your viva</li></ul>
+          </article>
+          <article class="card glass rv" data-c="med">
+            <span class="tag">Medical</span><div class="ico">🧬</div>
+            <h3>Clinical &amp; biomedical analysis</h3>
+            <p>Analysis for hospital and lab studies, from small audits to full research datasets.</p>
+            <ul><li>Regression, survival analysis, ROC and diagnostic accuracy</li><li>Agreement, reliability and group comparisons</li><li>Reproducible reports you can reuse</li></ul>
+          </article>
+          <article class="card glass rv" data-c="med">
+            <span class="tag">Research</span><div class="ico">📄</div>
+            <h3>Publication &amp; reviewer support</h3>
+            <p>Make the statistics in your paper hold up under review.</p>
+            <ul><li>Methods and results section checks</li><li>Figures, tables and effect sizes</li><li>Responses to statistical reviewer comments</li><li>Shareable code for transparency</li></ul>
+          </article>
+
+          <article class="card glass rv" data-c="biz">
+            <span class="tag">Business</span><div class="ico">📊</div>
+            <h3>Dashboards</h3>
+            <p>Dashboards your team actually opens, on Power BI, Tableau or the web.</p>
+            <ul><li>KPI design with your decision-makers</li><li>Live or scheduled data refresh</li><li>Clean, mobile-friendly layouts</li></ul>
+          </article>
+          <article class="card glass rv" data-c="biz">
+            <span class="tag">Business</span><div class="ico">🏢</div>
+            <h3>Analytics for firms &amp; organisations</h3>
+            <p>Turn sales, customer, operations or HR data into decisions.</p>
+            <ul><li>Segmentation and trend analysis</li><li>Demand and sales forecasting</li><li>Decision reports in plain language</li></ul>
+          </article>
+          <article class="card glass rv" data-c="biz">
+            <span class="tag">Organisations</span><div class="ico">📋</div>
+            <h3>Surveys, monitoring &amp; impact reports</h3>
+            <p>For NGOs, government programmes and institutions that need evidence.</p>
+            <ul><li>Questionnaire design and sampling</li><li>Analysis and programme monitoring</li><li>Donor- and department-ready reports</li></ul>
+          </article>
+          <article class="card glass rv" data-c="biz">
+            <span class="tag">Business</span><div class="ico">⚙️</div>
+            <h3>Automation &amp; data pipelines</h3>
             <p>Stop copying numbers between spreadsheets.</p>
-            <ul>
-              <li>Dashboards (Power BI, Excel, web)</li>
-              <li>Automated reports and data cleaning</li>
-              <li>Web scrapers and data pipelines</li>
-              <li>AI helpers for office documents</li>
-            </ul>
-          </div>
-          <div class="card">
-            <span class="tag">Research</span>
-            <h3>Analytics Support</h3>
-            <p>Methods and analysis support for scholars and teams.</p>
-            <ul>
-              <li>Statistical analysis and machine learning</li>
-              <li>Result interpretation and figures</li>
-              <li>Code review and reproducibility</li>
-              <li>Guidance, not ghostwriting</li>
-            </ul>
-          </div>
-          <div class="card">
-            <span class="tag">Learn</span>
-            <h3>Courses &amp; Tutoring</h3>
-            <p>Practical data skills, taught by someone who ships them.</p>
-            <ul>
-              <li>Python for data analysis</li>
-              <li>Statistics and machine learning</li>
-              <li>Time-series forecasting</li>
-              <li>One-on-one and small-group sessions</li>
-            </ul>
-          </div>
+            <ul><li>Automated recurring reports</li><li>Web scrapers and scheduled data fetching</li><li>Data cleaning and merging</li></ul>
+          </article>
+
+          <article class="card glass rv" data-c="ai">
+            <span class="tag">AI</span><div class="ico">📈</div>
+            <h3>Forecasting &amp; predictive models</h3>
+            <p>Prices, demand and other time series, with honest backtesting.</p>
+            <ul><li>Statistical, machine-learning and deep models</li><li>Rigorous evaluation without data leakage</li><li>Deployed with monitoring, like our market-price platform</li></ul>
+          </article>
+          <article class="card glass rv" data-c="ai">
+            <span class="tag">AI</span><div class="ico">🤖</div>
+            <h3>AI assistants for your documents</h3>
+            <p>Ask questions of your own reports, manuals and records.</p>
+            <ul><li>Document chatbots (retrieval-augmented)</li><li>Summarisation and drafting helpers</li><li>Office workflow automation</li></ul>
+          </article>
+          <article class="card glass rv" data-c="ai">
+            <span class="tag">AI</span><div class="ico">🔌</div>
+            <h3>APIs &amp; model deployment</h3>
+            <p>Take a model from notebook to something your team can use.</p>
+            <ul><li>FastAPI services and Docker packaging</li><li>Experiment tracking and monitoring</li><li>Automated retraining pipelines</li></ul>
+          </article>
+
+          <article class="card glass rv" data-c="agri">
+            <span class="tag">Agriculture</span><div class="ico">🌾</div>
+            <h3>Agriculture &amp; experimental design</h3>
+            <p>Deep domain experience in crops, orchards and markets.</p>
+            <ul><li>ANOVA, mixed models and G&times;E analysis</li><li>Field and lab experiment analysis</li><li>Crop and market-price intelligence</li></ul>
+          </article>
+
+          <article class="card glass rv" data-c="learn">
+            <span class="tag">Learn</span><div class="ico">🎓</div>
+            <h3>Courses &amp; one-to-one tutoring</h3>
+            <p>Concepts explained until they click.</p>
+            <ul><li>Statistics, SPSS, R and Python</li><li>Biostatistics for medical students</li><li>Machine learning and time series</li><li>Workshops for teams and institutions</li></ul>
+          </article>
+        </div>
+
+        <div class="policy glass rv"><strong>Our line on theses and papers:</strong> we design, analyse and interpret <em>your</em> data and teach you the result. We do not write your thesis, invent data or change findings. Your data stays confidential.</div>
+      </div>
+    </section>
+
+    <section id="demo">
+      <div class="wrap">
+        <div class="kicker rv">Proof, not promises</div>
+        <h2 class="rv">A live dashboard, built on open government data</h2>
+        <p class="sub rv">This is the kind of work we deliver. It pulls today's mandi prices from data.gov.in, cleans them, and turns them into signals, rankings and a heatmap. Interact with it below.</p>
+        <div class="demo glass rv">
+          <div class="bar"><i></i><i></i><i></i><span>VitastaIQ &middot; Mandi Intelligence</span></div>
+          <iframe src="demo/mandi/index.html" title="Mandi Intelligence dashboard" loading="lazy"></iframe>
+          <div class="row"><span>Live data, refreshed from data.gov.in.</span><a class="btn primary" href="demo/mandi/index.html">Open full dashboard</a></div>
         </div>
       </div>
     </section>
 
-    <section id="work">
+    <section id="process">
       <div class="wrap">
-        <h2>Work we stand behind</h2>
-        <p class="lead">Real systems, not slideware.</p>
-        <div class="grid">
-          <div class="card">
-            <h3>Agricultural price forecasting platform</h3>
-            <p>An end-to-end pipeline covering 150+ market series: automated data fetching, retraining, model monitoring and an API. <a href="https://micskuast.in">micskuast.in</a></p>
+        <div class="kicker rv">How it works</div>
+        <h2 class="rv">Clear steps, no surprises</h2>
+        <div class="steps">
+          <div class="step glass rv"><h3>Tell us</h3><p>Describe your data and what you need. A short chat is enough to start.</p></div>
+          <div class="step glass rv"><h3>Scope &amp; quote</h3><p>You get a written scope, timeline and fixed price before any work begins.</p></div>
+          <div class="step glass rv"><h3>Build &amp; share</h3><p>We work in the open: early drafts, quick questions, no black box.</p></div>
+          <div class="step glass rv"><h3>Deliver &amp; support</h3><p>Final files, documented code and a walkthrough, plus one revision round.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="wrap">
+        <div class="kicker rv">Who is behind it</div>
+        <h2 class="rv">Research-grade statistics, applied</h2>
+        <div class="about">
+          <div class="box glass rv">
+            <p>VitastaIQ is led by <strong>Dr. Aqib Gul</strong>, a statistician and data scientist with a PhD in Statistics from SKUAST-Kashmir. Vitasta is the Kashmiri name of the river Jhelum, and the work is meant to carry data from where it is collected to where decisions are made.</p>
+            <p>The same methods used in published research, in international journals across agriculture, hydrology and finance, power the dashboards, forecasts and analyses we build for clients. That includes an operational market-price forecasting platform and an open-source Python package for experimental design.</p>
+            <p><a href="https://deepstatistix.github.io/">Full portfolio &amp; publications</a> &middot; <a href="https://micskuast.in">MIC forecasting platform</a></p>
           </div>
-          <div class="card">
-            <h3>Live demo: Mandi Price Snapshot</h3>
-            <p>An interactive dashboard on public market data: prices, arrivals and state-wise changes. <a href="demo/mandi/">Open the demo</a></p>
-          </div>
-          <div class="card">
-            <h3>Peer-reviewed research</h3>
-            <p>Statistics and machine learning for agriculture, hydrology and finance, in international journals. <a href="https://deepstatistix.github.io/">Full portfolio</a></p>
-          </div>
+          <ul class="facts glass rv box">
+            <li><b>PhD Statistics</b>SKUAST-Kashmir, 2025</li>
+            <li><b>Tools</b>Python, R, SPSS, SQL, Power BI, Tableau</li>
+            <li><b>Methods</b>Inference, regression, mixed models, time series, machine learning</li>
+            <li><b>Based in</b>Srinagar, Jammu &amp; Kashmir. Remote work welcome.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="wrap">
+        <div class="kicker rv">Questions</div>
+        <h2 class="rv">Good to know</h2>
+        <div class="rv">
+          <details><summary>Will you write my thesis or paper?</summary><p>No. We help with study design, analysis and interpretation of your own real data, and we teach you the results so you can defend them. The writing and the conclusions stay yours.</p></details>
+          <details><summary>How is pricing decided?</summary><p>Every project gets a fixed quote after a short scoping chat, based on the data, the deliverables and the deadline. Students and early-stage teams are welcome to ask about reduced rates.</p></details>
+          <details><summary>Is my data kept confidential?</summary><p>Yes. Client data is used only for your project and is not shared or published. We can sign a simple confidentiality agreement on request.</p></details>
+          <details><summary>Which software do you use?</summary><p>SPSS, R and Python for analysis; Power BI, Tableau or web dashboards for reporting. We deliver in the tools you can open and maintain.</p></details>
+          <details><summary>Can you work with clients outside Kashmir?</summary><p>Yes. Most work is remote, by email, calls and shared files.</p></details>
+          <details><summary>How fast can you start?</summary><p>Small analyses can start within days. Larger builds are scheduled after the scope is agreed.</p></details>
         </div>
       </div>
     </section>
 
     <section id="contact">
       <div class="wrap">
-        <h2>Tell us what you need</h2>
-        <p class="lead">Describe the problem in a few lines. We reply within two working days.</p>
-        <!-- TODO: replace action with a real form endpoint (Formspree, Netlify Forms, etc.) -->
-        <form action="#" method="post">
-          <input name="name" placeholder="Your name" required>
-          <input name="email" type="email" placeholder="Email or WhatsApp number" required>
-          <select name="service">
-            <option>Data &amp; Automation</option>
-            <option>Analytics Support</option>
-            <option>Courses &amp; Tutoring</option>
-            <option>Something else</option>
-          </select>
-          <textarea name="message" rows="5" placeholder="What are you trying to solve?" required></textarea>
-          <button class="btn" type="submit">Send</button>
-        </form>
+        <div class="kicker rv">Get in touch</div>
+        <h2 class="rv">Tell us what you need</h2>
+        <p class="sub rv">A few lines are enough. We usually reply within two working days.</p>
+        <div class="contact">
+          <form class="glass rv" id="form">
+            <div><label for="name">Your name</label><input id="name" name="name" required autocomplete="name"></div>
+            <div><label for="contactinfo">Email or WhatsApp number</label><input id="contactinfo" name="contactinfo" required></div>
+            <div><label for="service">I need help with</label>
+              <select id="service" name="service">
+                <option>Medical thesis / dissertation statistics</option>
+                <option>Clinical or biomedical research analysis</option>
+                <option>Publication or reviewer support</option>
+                <option>Dashboard</option>
+                <option>Analytics for my organisation</option>
+                <option>Survey, monitoring or impact report</option>
+                <option>Automation or data pipeline</option>
+                <option>Forecasting or predictive model</option>
+                <option>AI assistant for documents</option>
+                <option>Agriculture or experimental design</option>
+                <option>Course or tutoring</option>
+                <option>Something else</option>
+              </select></div>
+            <div><label for="msg">What are you trying to solve?</label><textarea id="msg" name="msg" rows="5" required></textarea></div>
+            <button class="btn primary" type="submit">Send by email</button>
+            <p class="note">This opens your email app with the message ready to send to vitastaiq@gmail.com.</p>
+          </form>
+          <div class="side glass rv">
+            <h3>Prefer to write directly?</h3>
+            <p>Email <a href="mailto:vitastaiq@gmail.com">vitastaiq@gmail.com</a> with your data description, deadline and anything you have already tried.</p>
+            <p>Please do not send confidential patient or personal data in the first message. Describe the dataset first and we will agree how to share it safely.</p>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
   <footer>
-    <div class="wrap">&copy; 2026 VitastaIQ &middot; Kashmir &middot; <a href="mailto:vitastaiq@gmail.com">vitastaiq@gmail.com</a> <!-- TODO: WhatsApp / LinkedIn --></div>
+    <div class="wrap">
+      <span>&copy; 2026 VitastaIQ &middot; Srinagar, Kashmir</span>
+      <span><a href="mailto:vitastaiq@gmail.com">vitastaiq@gmail.com</a> &middot; <a href="https://deepstatistix.github.io/">Portfolio</a> &middot; <a href="https://github.com/DeepStatistix">GitHub</a></span>
+    </div>
   </footer>
+
+<script src="demo/mandi/live.js" onerror="void 0"></script>
+<script>
+(function () {
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var fmt = function (n) { return Math.round(n).toLocaleString("en-IN"); };
+
+  /* rotating headline word */
+  var words = ["decisions", "dashboards", "thesis results", "forecasts", "AI tools", "clear reports"];
+  var el = document.getElementById("rot");
+  if (reduce) { el.textContent = words[0]; el.style.borderRight = "0"; }
+  else {
+    var w = 0, i = 0, del = false;
+    (function tick() {
+      var full = words[w];
+      i += del ? -1 : 1;
+      el.textContent = full.slice(0, i);
+      var wait = del ? 45 : 85;
+      if (!del && i === full.length) { del = true; wait = 1500; }
+      else if (del && i === 0) { del = false; w = (w + 1) % words.length; wait = 350; }
+      setTimeout(tick, wait);
+    })();
+  }
+
+  /* live numbers from the dashboard's data, if present */
+  if (window.LIVE) {
+    document.getElementById("liveMarkets").setAttribute("data-count", window.LIVE.markets);
+    document.getElementById("liveComm").setAttribute("data-count", Object.keys(window.LIVE.commodities).length);
+    document.getElementById("liveA").hidden = false;
+    document.getElementById("liveB").hidden = false;
+  }
+
+  /* count-up */
+  function count(n) {
+    var end = +n.getAttribute("data-count"), suf = n.getAttribute("data-suffix") || "", t0 = null;
+    if (reduce) { n.textContent = fmt(end) + suf; return; }
+    (function step(t) {
+      if (t0 === null) t0 = t;
+      var p = Math.min(1, (t - t0) / 1100);
+      n.textContent = fmt(end * (1 - Math.pow(1 - p, 3))) + suf;
+      if (p < 1) requestAnimationFrame(step);
+    })(performance.now());
+  }
+  var counted = false;
+  function runCounts() { if (counted) return; counted = true; Array.prototype.forEach.call(document.querySelectorAll("[data-count]"), count); }
+
+  /* reveal on scroll */
+  var rv = document.querySelectorAll(".rv");
+  if ("IntersectionObserver" in window && !reduce) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    Array.prototype.forEach.call(rv, function (x) { io.observe(x); });
+  } else { Array.prototype.forEach.call(rv, function (x) { x.classList.add("in"); }); }
+  runCounts();
+
+  /* service filter */
+  document.getElementById("filters").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    var f = b.getAttribute("data-f");
+    Array.prototype.forEach.call(this.children, function (c) { c.setAttribute("aria-pressed", c === b ? "true" : "false"); });
+    Array.prototype.forEach.call(document.querySelectorAll("#cards .card"), function (c) {
+      var show = f === "all" || c.getAttribute("data-c") === f;
+      c.hidden = !show;
+      if (show) c.classList.add("in");
+    });
+  });
+
+  /* contact form -> prefilled email (no backend needed) */
+  document.getElementById("form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var f = e.target, g = function (n) { return f.elements[n].value.trim(); };
+    var body = "Name: " + g("name") + "\nContact: " + g("contactinfo") + "\nService: " + g("service") + "\n\n" + g("msg");
+    window.location.href = "mailto:vitastaiq@gmail.com?subject=" + encodeURIComponent("Enquiry: " + g("service")) + "&body=" + encodeURIComponent(body);
+  });
+})();
+</script>
 </body>
 </html>
