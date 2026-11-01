@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mandi Price Snapshot</title>
+  <style>
+    :root { --bg:#fbfaf7; --fg:#1d2a2e; --muted:#5b6a6e; --accent:#0f6b6b; --card:#fff; --line:#e3e0d8; --up:#b3261e; --down:#1e7a46; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg:#11181a; --fg:#e8ecec; --muted:#9fb0b3; --accent:#3fb5b0; --card:#182225; --line:#2a393c; --up:#ff8a80; --down:#6fcf97; }
+    }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    .wrap { max-width:1040px; margin:0 auto; padding:20px 16px 40px; }
+    h1 { margin:0 0 4px; font-size:1.6rem; }
+    .sub { color:var(--muted); margin:0 0 20px; }
+    .tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+    .tabs button { font:inherit; padding:8px 16px; border:1px solid var(--line); background:var(--card); color:var(--fg); border-radius:99px; cursor:pointer; }
+    .tabs button[aria-pressed="true"] { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .stats { display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); margin-bottom:16px; }
+    .stat, .panel { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+    .stat .k { color:var(--muted); font-size:.85rem; }
+    .stat .v { font-size:1.6rem; font-weight:650; }
+    .stat .d { font-size:.9rem; }
+    .panel { margin-bottom:16px; }
+    .panel h2 { margin:0 0 8px; font-size:1.05rem; }
+    .chart { width:100%; height:320px; }
+    table { width:100%; border-collapse:collapse; font-size:.92rem; }
+    th, td { text-align:right; padding:6px 8px; border-bottom:1px solid var(--line); }
+    th:first-child, td:first-child { text-align:left; }
+    th { color:var(--muted); font-weight:600; }
+    .up { color:var(--up); } .down { color:var(--down); }
+    .scroll { overflow-x:auto; }
+    .note { color:var(--muted); font-size:.85rem; margin-top:20px; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Mandi Price Snapshot</h1>
+  <p class="sub" id="sub">Loading…</p>
+  <div class="tabs" id="tabs" role="group" aria-label="Commodity"></div>
+  <div class="stats" id="stats"></div>
+  <div class="panel"><h2>National average modal price (Rs/quintal, arrival-weighted)</h2><div class="chart" id="priceChart"></div></div>
+  <div class="panel"><h2>Daily arrivals (metric tonnes)</h2><div class="chart" id="arrChart"></div></div>
+  <div class="panel"><h2>By state: last 7 days vs previous 7 days</h2><div class="scroll"><table id="states"></table></div></div>
+  <div class="panel"><h2>Ten busiest markets (last 7 days)</h2><div class="scroll"><table id="markets"></table></div></div>
+  <p class="note">Source: public Agmarknet daily price and arrival reports. Average prices are weighted by arrival quantity; days with unusually few reporting markets are excluded. Sample dashboard by Vitasta Labs. For information only, not trading advice.</p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.2/plotly.min.js"></script>
+<script src="data.js"></script>
+<script>
+(function () {
+  var D = window.MANDI, names = Object.keys(D), cur = names[0];
+  var $ = function (id) { return document.getElementById(id); };
+  var fmt = function (n) { return Math.round(n).toLocaleString("en-IN"); };
+  function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+
+  function pct(p) {
+    if (p == null) return "–";
+    return '<span class="' + (p > 0 ? "up" : p < 0 ? "down" : "") + '">' + (p > 0 ? "+" : "") + p.toFixed(1) + "%</span>";
+  }
+  function table(el, head, rows) {
+    el.innerHTML = "<thead><tr>" + head.map(function (h) { return "<th>" + h + "</th>"; }).join("") + "</tr></thead><tbody>" +
+      rows.map(function (r) { return "<tr>" + r.map(function (c) { return "<td>" + c + "</td>"; }).join("") + "</tr>"; }).join("") + "</tbody>";
+  }
+  function layout(extra) {
+    return Object.assign({
+      margin: { l: 56, r: 12, t: 8, b: 36 }, paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor: "rgba(0,0,0,0)",
+      font: { color: css("--fg") }, xaxis: { gridcolor: css("--line") }, yaxis: { gridcolor: css("--line") }
+    }, extra || {});
+  }
+
+  function render() {
+    var c = D[cur], d = c.daily, n = d.length, last = d[n - 1];
+    $("sub").textContent = cur + " · data to " + c.last_date + " · " + c.rows.toLocaleString("en-IN") + " market records";
+    var w = d.slice(-7), prev = d.slice(-14, -7);
+    var avg = function (a, k) { return a.reduce(function (s, r) { return s + r[k]; }, 0) / (a.length || 1); };
+    var pNow = avg(w, "price"), pPrev = prev.length ? avg(prev, "price") : null;
+    var aNow = avg(w, "arrival");
+    $("stats").innerHTML =
+      '<div class="stat"><div class="k">Latest price</div><div class="v">Rs ' + fmt(last.price) + '</div><div class="d">per quintal, ' + last.date + "</div></div>" +
+      '<div class="stat"><div class="k">7-day average price</div><div class="v">Rs ' + fmt(pNow) + '</div><div class="d">' + (pPrev ? pct((pNow / pPrev - 1) * 100) + " vs previous 7 days" : "no prior week") + "</div></div>" +
+      '<div class="stat"><div class="k">Avg daily arrivals</div><div class="v">' + fmt(aNow) + ' t</div><div class="d">last 7 days</div></div>' +
+      '<div class="stat"><div class="k">Markets reporting</div><div class="v">' + fmt(avg(w, "markets")) + '</div><div class="d">per day, last 7 days</div></div>';
+
+    var x = d.map(function (r) { return r.date; });
+    Plotly.react("priceChart", [{ x: x, y: d.map(function (r) { return r.price; }), type: "scatter", mode: "lines+markers", line: { color: css("--accent"), width: 2 }, hovertemplate: "%{x}<br>Rs %{y:,.0f}<extra></extra>" }],
+      layout({ yaxis: { gridcolor: css("--line"), title: "Rs/quintal" } }), { displayModeBar: false, responsive: true });
+    Plotly.react("arrChart", [{ x: x, y: d.map(function (r) { return r.arrival; }), type: "bar", marker: { color: css("--accent") }, hovertemplate: "%{x}<br>%{y:,.0f} t<extra></extra>" }],
+      layout({ yaxis: { gridcolor: css("--line"), title: "tonnes" } }), { displayModeBar: false, responsive: true });
+
+    table($("states"), ["State", "Price (Rs/q)", "Change", "Arrivals (t)", "Markets"],
+      c.states.slice(0, 15).map(function (s) { return [s.state, fmt(s.price), pct(s.change_pct), fmt(s.arrival), s.markets]; }));
+    table($("markets"), ["Market", "State", "Price (Rs/q)", "Arrivals (t)"],
+      c.top_markets.map(function (m) { return [m.market, m.state, fmt(m.price), fmt(m.arrival)]; }));
+  }
+
+  $("tabs").innerHTML = names.map(function (nm) { return '<button type="button" data-n="' + nm + '" aria-pressed="' + (nm === cur) + '">' + nm + "</button>"; }).join("");
+  $("tabs").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    cur = b.dataset.n;
+    Array.prototype.forEach.call($("tabs").children, function (x) { x.setAttribute("aria-pressed", x.dataset.n === cur); });
+    render();
+  });
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+  render();
+})();
+</script>
+</body>
+</html>
