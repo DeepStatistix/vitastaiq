@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sample Size Calculator</title>
+  <meta name="description" content="Sample size and power calculator for medical theses and clinical studies: two means, two proportions, prevalence, paired means and correlation, with a ready-to-paste methods sentence.">
+  <style>
+    :root { color-scheme: dark; --bg:#070b14; --bg2:#0d1424; --card:rgba(255,255,255,.045); --line:rgba(255,255,255,.09); --fg:#e9eef7; --muted:#8c9ab3; --a:#22d3c5; --b:#6aa8ff; --warm:#ffb454; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--fg); font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; min-height:100vh;
+      background: radial-gradient(900px 500px at 85% -10%, rgba(34,211,197,.14), transparent 60%), radial-gradient(700px 420px at -10% 10%, rgba(106,168,255,.13), transparent 60%), linear-gradient(var(--bg), var(--bg2)) fixed; }
+    body::before { content:""; position:fixed; inset:0; pointer-events:none; opacity:.3; background-image:linear-gradient(var(--line) 1px, transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px); background-size:44px 44px; -webkit-mask-image:radial-gradient(ellipse at 50% 0%,#000,transparent 70%); mask-image:radial-gradient(ellipse at 50% 0%,#000,transparent 70%); }
+    .wrap { position:relative; max-width:1060px; margin:0 auto; padding:22px 16px 56px; }
+    .glass { background:var(--card); border:1px solid var(--line); border-radius:16px; backdrop-filter:blur(6px); }
+    header { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:22px; }
+    .logo { font-weight:750; } .logo b { background:linear-gradient(90deg,var(--a),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .logo a { color:var(--muted); font-weight:500; text-decoration:none; font-size:.9rem; margin-left:8px; }
+    h1 { font-size:clamp(1.8rem,5vw,2.8rem); line-height:1.1; margin:0 0 8px; letter-spacing:-.02em; }
+    h1 span { background:linear-gradient(90deg,var(--a),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .lede { color:var(--muted); max-width:66ch; margin:0 0 20px; }
+    .tabs { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+    .chip { font:inherit; font-size:.9rem; color:var(--fg); background:transparent; border:1px solid var(--line); border-radius:99px; padding:7px 15px; cursor:pointer; }
+    .chip:hover { border-color:var(--a); }
+    .chip[aria-pressed="true"] { background:linear-gradient(90deg,var(--a),var(--b)); color:#04121a; border-color:transparent; font-weight:650; }
+    .layout { display:grid; gap:16px; grid-template-columns:1fr 1.1fr; align-items:start; } @media (max-width:860px) { .layout { grid-template-columns:1fr; } }
+    .panel { padding:18px; margin-bottom:16px; }
+    .panel h2 { font-size:1.02rem; margin:0 0 4px; } .sub { color:var(--muted); font-size:.85rem; margin:0 0 12px; }
+    .f { display:grid; gap:4px; margin-bottom:11px; } label { font-size:.84rem; color:var(--muted); display:flex; justify-content:space-between; gap:8px; }
+    label small { color:var(--muted); opacity:.8; }
+    input, select { font:inherit; color:var(--fg); background:rgba(0,0,0,.3); border:1px solid var(--line); border-radius:10px; padding:9px 11px; width:100%; }
+    input:focus, select:focus { outline:2px solid var(--a); outline-offset:1px; }
+    .row2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .big { text-align:center; padding:6px 0 4px; } .big .n { font-size:3.4rem; font-weight:800; letter-spacing:-.03em; font-variant-numeric:tabular-nums; background:linear-gradient(90deg,var(--a),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent; line-height:1.1; }
+    .big .l { color:var(--muted); font-size:.85rem; }
+    .kv { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; margin:12px 0; }
+    .kv div { padding:10px 12px; border:1px solid var(--line); border-radius:12px; } .kv b { display:block; font-size:1.25rem; font-variant-numeric:tabular-nums; } .kv span { color:var(--muted); font-size:.76rem; text-transform:uppercase; letter-spacing:.07em; }
+    .sent { padding:14px 16px; border-left:3px solid var(--a); border-radius:8px; background:rgba(0,0,0,.25); color:#cfd9ea; font-size:.9rem; }
+    .btn { font:inherit; font-weight:650; color:#04121a; background:linear-gradient(90deg,var(--a),var(--b)); border:0; border-radius:10px; padding:9px 16px; cursor:pointer; margin-top:10px; }
+    .chart { width:100%; height:240px; position:relative; }
+    .err { color:var(--warm); font-size:.85rem; min-height:1.2em; }
+    .note { color:var(--muted); font-size:.8rem; margin-top:22px; border-top:1px solid var(--line); padding-top:14px; }
+    ul.m { color:var(--muted); font-size:.88rem; padding-left:18px; margin:6px 0 0; } ul.m li { margin:4px 0; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header><div class="logo">Vitasta<b>IQ</b> <span style="color:var(--muted);font-weight:500">/ Sample Size Calculator</span><a href="../../index.html">&larr; Home</a><a href="../forecast/index.html">Forecast Lab</a></div></header>
+  <h1>How many participants <span>do you need?</span></h1>
+  <p class="lede">A planning tool for thesis and clinical research. Choose your design, enter what you expect to find, and get the sample size, a power curve, and a methods sentence you can adapt for your protocol.</p>
+
+  <div class="tabs" id="tabs" role="group" aria-label="Study design"></div>
+
+  <div class="layout">
+    <div>
+      <div class="panel glass"><h2 id="dtitle"></h2><p class="sub" id="ddesc"></p><div id="fields"></div>
+        <div class="row2">
+          <div class="f"><label for="alpha">Significance level (alpha)</label><select id="alpha"><option value="0.05" selected>0.05</option><option value="0.01">0.01</option><option value="0.10">0.10</option></select></div>
+          <div class="f" id="powerBox"><label for="power">Power</label><select id="power"><option value="0.8" selected>80%</option><option value="0.85">85%</option><option value="0.9">90%</option><option value="0.95">95%</option></select></div>
+        </div>
+        <div class="row2">
+          <div class="f" id="sidesBox"><label for="sides">Test</label><select id="sides"><option value="2" selected>Two-sided</option><option value="1">One-sided</option></select></div>
+          <div class="f"><label for="drop">Expected dropout / non-response (%)</label><input id="drop" type="number" min="0" max="60" step="1" value="10"></div>
+        </div>
+        <div class="err" id="err" role="alert"></div>
+      </div>
+    </div>
+    <div>
+      <div class="panel glass">
+        <div class="big"><div class="n" id="N">-</div><div class="l" id="Nl"></div></div>
+        <div class="kv" id="kv"></div>
+        <h2 style="margin-top:6px">Methods sentence</h2>
+        <div class="sent" id="sent"></div>
+        <button class="btn" id="copy" type="button">Copy sentence</button> <span class="sub" id="copied"></span>
+      </div>
+      <div class="panel glass"><h2>Sample size vs power</h2><p class="sub">Larger samples buy power with diminishing returns. The dot marks your choice.</p><div class="chart" id="curve"></div></div>
+    </div>
+  </div>
+
+  <div class="panel glass"><h2>Before you rely on this</h2>
+    <ul class="m">
+      <li>These are standard normal-approximation formulas (Chow, Shao &amp; Wang; Fleiss; Lwanga &amp; Lemeshow) with a small-sample correction for means. Results agree with commonly published values, for example 64 per group for a medium effect (d = 0.5) at 80% power and 5% two-sided alpha.</li>
+      <li>The inputs are your <b>assumptions</b>, such as the standard deviation and the smallest difference worth detecting. Take them from a pilot study or published papers, and cite the source in your protocol.</li>
+      <li>Complex designs (clustered, survival, repeated measures, multiple endpoints, non-inferiority) need a different calculation. Ask a statistician before you finalise.</li>
+    </ul>
+  </div>
+  <p class="note">A planning aid from VitastaIQ, not a substitute for statistical advice on your specific study. <a href="../../index.html#contact" style="color:var(--a)">Need help with your thesis statistics?</a></p>
+</div>
+<script src="calc.js"></script>
+<script>
+(function () {
+  var S = window.SS, D = S.designs, $ = function (id) { return document.getElementById(id); };
+  var fmt = function (n) { return Math.round(n).toLocaleString("en-IN"); };
+  var pc = function (p) { return (p * 100).toFixed(p * 100 % 1 ? 1 : 0) + "%"; };
+  var specs = {
+    twoMeans: { name: "Compare two means", desc: "Two independent groups, a continuous outcome (for example blood pressure, HbA1c, a score).",
+      fields: [["sd", "Standard deviation of the outcome", 10, 0.01, "any"], ["delta", "Smallest difference worth detecting", 5, 0.01, "any"], ["ratio", "Allocation ratio (group 2 / group 1)", 1, 0.1, "any"]], sides: true, power: true },
+    twoProps: { name: "Compare two proportions", desc: "Two independent groups, a yes/no outcome (for example cure rate, complication rate).",
+      fields: [["p1", "Expected proportion, group 1 (0 to 1)", 0.5, 0.01, "any"], ["p2", "Expected proportion, group 2 (0 to 1)", 0.3, 0.01, "any"], ["ratio", "Allocation ratio (group 2 / group 1)", 1, 0.1, "any"]], sides: true, power: true },
+    oneProp: { name: "Estimate a prevalence", desc: "A cross-sectional survey estimating one proportion with a chosen precision.",
+      fields: [["p", "Expected prevalence (0 to 1)", 0.2, 0.01, "any"], ["d", "Absolute precision (margin of error, 0 to 1)", 0.05, 0.005, "any"], ["N", "Population size (leave blank if large or unknown)", "", 1, "any"]], sides: false, power: false },
+    paired: { name: "Paired means (before / after)", desc: "The same people measured twice, a continuous outcome.",
+      fields: [["sdDiff", "SD of the within-person differences", 10, 0.01, "any"], ["delta", "Smallest mean change worth detecting", 5, 0.01, "any"]], sides: true, power: true },
+    corr: { name: "Correlation", desc: "Is a correlation between two continuous variables different from zero?",
+      fields: [["r", "Smallest correlation worth detecting (r)", 0.3, 0.01, "any"]], sides: true, power: true }
+  };
+  var keys = Object.keys(specs), cur = keys[0];
+
+  function setTabs() { $("tabs").innerHTML = keys.map(function (k) { return '<button class="chip" type="button" data-k="' + k + '" aria-pressed="' + (k === cur) + '">' + specs[k].name + "</button>"; }).join(""); }
+  function setFields() {
+    var sp = specs[cur]; $("dtitle").textContent = sp.name; $("ddesc").textContent = sp.desc;
+    $("fields").innerHTML = sp.fields.map(function (f) { return '<div class="f"><label for="f_' + f[0] + '">' + f[1] + '</label><input id="f_' + f[0] + '" type="number" step="' + f[3] + '" value="' + f[2] + '" inputmode="decimal"></div>'; }).join("");
+    $("sidesBox").style.display = sp.sides ? "" : "none"; $("powerBox").style.display = sp.power ? "" : "none";
+    Array.prototype.forEach.call(document.querySelectorAll("#fields input"), function (i) { i.addEventListener("input", calc); });
+  }
+  function read() {
+    var o = { alpha: +$("alpha").value, sides: +$("sides").value, power: +$("power").value };
+    specs[cur].fields.forEach(function (f) { var v = $("f_" + f[0]).value; o[f[0]] = v === "" ? null : +v; });
+    return o;
+  }
+  function validate(o) {
+    var need = function (k) { return o[k] !== null && !isNaN(o[k]); };
+    var c = cur;
+    if (c === "twoMeans") { if (!need("sd") || o.sd <= 0) return "Enter a standard deviation above 0."; if (!need("delta") || o.delta === 0) return "Enter a non-zero difference."; if (o.delta < 0) o.delta = -o.delta; if (!need("ratio") || o.ratio <= 0) return "Allocation ratio must be above 0."; }
+    if (c === "twoProps") { if (!need("p1") || !need("p2") || o.p1 <= 0 || o.p1 >= 1 || o.p2 <= 0 || o.p2 >= 1) return "Proportions must be between 0 and 1 (for example 0.35 for 35%)."; if (o.p1 === o.p2) return "The two proportions must differ."; if (!need("ratio") || o.ratio <= 0) return "Allocation ratio must be above 0."; }
+    if (c === "oneProp") { if (!need("p") || o.p <= 0 || o.p >= 1) return "Expected prevalence must be between 0 and 1."; if (!need("d") || o.d <= 0 || o.d >= 1) return "Precision must be between 0 and 1."; if (o.N !== null && o.N < 2) o.N = null; }
+    if (c === "paired") { if (!need("sdDiff") || o.sdDiff <= 0) return "Enter an SD above 0."; if (!need("delta") || o.delta === 0) return "Enter a non-zero change."; if (o.delta < 0) o.delta = -o.delta; }
+    if (c === "corr") { if (!need("r") || o.r === 0 || Math.abs(o.r) >= 1) return "r must be between -1 and 1, and not 0."; o.r = Math.abs(o.r); }
+    if (o.alpha >= 1) return "Alpha must be below 1.";
+    return "";
+  }
+  function sentence(o, res, drop, tot, totD) {
+    var side = o.sides === 1 ? "one-sided" : "two-sided", a = (o.alpha * 100) + "%", pw = pc(o.power), dp = drop > 0 ? " Allowing for " + drop + "% dropout or non-response, " : "";
+    var each = function (n) { return drop > 0 ? S.withDropout(n, drop / 100) : n; };
+    switch (cur) {
+      case "twoMeans": return "A sample of " + res.n1 + " participants in group 1 and " + res.n2 + " in group 2 (" + tot + " in total) is required to detect a mean difference of " + o.delta + " (assumed SD " + o.sd + ") with " + pw + " power at a " + side + " significance level of " + a + ", using the normal approximation with a small-sample correction." + (drop > 0 ? dp + each(res.n1) + " and " + each(res.n2) + " participants (" + totD + " in total) will be recruited." : "");
+      case "twoProps": return "A sample of " + res.n1 + " participants in group 1 and " + res.n2 + " in group 2 (" + tot + " in total) is required to detect a difference between proportions of " + o.p1 + " and " + o.p2 + " with " + pw + " power at a " + side + " significance level of " + a + "." + (drop > 0 ? dp + each(res.n1) + " and " + each(res.n2) + " participants (" + totD + " in total) will be recruited." : "");
+      case "oneProp": return "To estimate a prevalence of " + pc(o.p) + " with an absolute precision of " + pc(o.d) + " at the " + (100 - o.alpha * 100) + "% confidence level" + (o.N ? " in a population of " + fmt(o.N) : "") + ", a sample of " + res.n1 + " participants is required." + (drop > 0 ? dp + totD + " participants will be approached." : "");
+      case "paired": return "A sample of " + res.n1 + " paired observations is required to detect a mean change of " + o.delta + " (assumed SD of differences " + o.sdDiff + ") with " + pw + " power at a " + side + " significance level of " + a + "." + (drop > 0 ? dp + totD + " participants will be recruited." : "");
+      default: return "A sample of " + res.n1 + " participants is required to detect a correlation of r = " + o.r + " with " + pw + " power at a " + side + " significance level of " + a + " (Fisher z method)." + (drop > 0 ? dp + totD + " participants will be recruited." : "");
+    }
+  }
+  function curve(o, drop) {
+    var el = $("curve"), W = Math.max(el.clientWidth, 280), H = 240, l = 52, r = 12, t = 10, b = 28, iw = W - l - r, ih = H - t - b, pts = [];
+    if (cur === "oneProp") {  /* prevalence has no power: show sample size against the margin of error instead */
+      for (var dd = 0.02; dd <= 0.1501; dd += 0.005) { var o3 = {}; for (var k3 in o) o3[k3] = o[k3]; o3.d = dd; pts.push([dd, S.withDropout(D.oneProp(o3).n1, drop / 100)]); }
+      var ym = Math.max.apply(null, pts.map(function (q) { return q[1]; })) * 1.05, sx3 = function (v) { return l + (v - 0.02) / 0.13 * iw; }, sy3 = function (v) { return t + ih - v / ym * ih; };
+      var s3 = '<svg width="' + W + '" height="' + H + '">';
+      for (var i3 = 0; i3 <= 4; i3++) { var v3 = ym * i3 / 4; s3 += '<line x1="' + l + '" x2="' + (W - r) + '" y1="' + sy3(v3) + '" y2="' + sy3(v3) + '" stroke="rgba(255,255,255,.08)"/><text x="' + (l - 6) + '" y="' + (sy3(v3) + 4) + '" text-anchor="end" font-size="11" fill="#8c9ab3">' + fmt(v3) + "</text>"; }
+      [0.02, 0.05, 0.08, 0.1, 0.15].forEach(function (q) { s3 += '<text x="' + sx3(q) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="11" fill="#8c9ab3">' + Math.round(q * 100) + "%</text>"; });
+      s3 += '<polyline fill="none" stroke="#22d3c5" stroke-width="2.4" points="' + pts.map(function (q) { return sx3(q[0]) + "," + sy3(q[1]); }).join(" ") + '"/>';
+      var cd = Math.min(Math.max(o.d, 0.02), 0.15); s3 += '<circle cx="' + sx3(cd) + '" cy="' + sy3(S.withDropout(D.oneProp(o).n1, drop / 100)) + '" r="6" fill="#070b14" stroke="#ffb454" stroke-width="3"/>';
+      el.innerHTML = s3 + "</svg>"; return;
+    }
+    for (var p = 0.6; p <= 0.991; p += 0.01) { var oo = {}; for (var k in o) oo[k] = o[k]; oo.power = p; var rs = D[cur](oo), n = rs.n1 + rs.n2; pts.push([p, S.withDropout(n, drop / 100)]); }
+    var ymax = Math.max.apply(null, pts.map(function (q) { return q[1]; })) * 1.05, ymin = Math.min.apply(null, pts.map(function (q) { return q[1]; })) * 0.9;
+    var sx = function (v) { return l + (v - 0.6) / 0.4 * iw; }, sy = function (v) { return t + ih - (v - ymin) / (ymax - ymin) * ih; };
+    var s = '<svg width="' + W + '" height="' + H + '">';
+    for (var i = 0; i <= 4; i++) { var v = ymin + (ymax - ymin) * i / 4; s += '<line x1="' + l + '" x2="' + (W - r) + '" y1="' + sy(v) + '" y2="' + sy(v) + '" stroke="rgba(255,255,255,.08)"/><text x="' + (l - 6) + '" y="' + (sy(v) + 4) + '" text-anchor="end" font-size="11" fill="#8c9ab3">' + fmt(v) + "</text>"; }
+    [0.6, 0.7, 0.8, 0.9, 0.99].forEach(function (p) { s += '<text x="' + sx(p) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="11" fill="#8c9ab3">' + Math.round(p * 100) + "%</text>"; });
+    s += '<polyline fill="none" stroke="#22d3c5" stroke-width="2.4" points="' + pts.map(function (q) { return sx(q[0]) + "," + sy(q[1]); }).join(" ") + '"/>';
+    if (specs[cur].power) { var cp = Math.min(Math.max(o.power, 0.6), 0.99), oo2 = {}; for (var k2 in o) oo2[k2] = o[k2]; oo2.power = cp; var rr = D[cur](oo2), cn = S.withDropout(rr.n1 + rr.n2, drop / 100); s += '<circle cx="' + sx(cp) + '" cy="' + sy(cn) + '" r="6" fill="#070b14" stroke="#ffb454" stroke-width="3"/>'; }
+    el.innerHTML = s + "</svg>";
+  }
+  function calc() {
+    var o = read(), msg = validate(o); $("err").textContent = msg; if (msg) return;
+    var drop = Math.max(0, Math.min(60, +$("drop").value || 0)), res = D[cur](o), two = res.groups === 2;
+    var tot = res.n1 + res.n2, totD = S.withDropout(res.n1, drop / 100) + (two ? S.withDropout(res.n2, drop / 100) : 0);
+    $("N").textContent = fmt(totD); $("Nl").textContent = (two ? "participants in total" : "participants") + (drop > 0 ? " (including " + drop + "% dropout)" : "");
+    $("kv").innerHTML = two ?
+      '<div><b>' + fmt(res.n1) + '</b><span>Group 1</span></div><div><b>' + fmt(res.n2) + '</b><span>Group 2</span></div><div><b>' + fmt(tot) + '</b><span>Before dropout</span></div>' :
+      '<div><b>' + fmt(res.n1) + '</b><span>Before dropout</span></div><div><b>' + fmt(totD) + '</b><span>With dropout</span></div>';
+    $("sent").textContent = sentence(o, res, drop, tot, totD);
+    curve(o, drop);
+  }
+  $("tabs").addEventListener("click", function (e) { var b = e.target.closest && e.target.closest("button"); if (!b) return; cur = b.getAttribute("data-k"); setTabs(); setFields(); calc(); });
+  ["alpha", "power", "sides", "drop"].forEach(function (id) { $(id).addEventListener("input", calc); });
+  $("copy").addEventListener("click", function () {
+    var t = $("sent").textContent, done = function () { $("copied").textContent = "Copied"; setTimeout(function () { $("copied").textContent = ""; }, 1800); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () { $("copied").textContent = "Select and copy manually"; }); else $("copied").textContent = "Select and copy manually";
+  });
+  window.addEventListener("resize", calc);
+  setTabs(); setFields(); calc();
+})();
+</script>
+</body>
+</html>

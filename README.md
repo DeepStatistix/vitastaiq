@@ -8,6 +8,7 @@ Data, automation and AI services from Kashmir, for local businesses, researchers
 |---|---|
 | `site/` | Static website (plain HTML/CSS), deployed to GitHub Pages by `.github/workflows/pages.yml` |
 | `site/demo/mandi/` | Mandi Intelligence dashboard built on public Agmarknet data from data.gov.in |
+| `site/demo/samplesize/` | Sample Size Calculator for medical theses (five designs, power curve, methods sentence; formulas in `calc.js`) |
 | `site/demo/forecast/` | Price Forecast Lab: 12-week forecasts with rolling backtests (`build_forecast.py` needs pandas, numpy, statsmodels) |
 
 Internal planning documents (pricing, outreach, brand notes) are kept in a separate private repository.
